@@ -1,5 +1,4 @@
 # Campus Share
-
 An Inter Campus Delivery Service
 
 ## ☸ Technologies Required
