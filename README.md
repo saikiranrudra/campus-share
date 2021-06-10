@@ -6,7 +6,7 @@ An Inter Campus Delivery Service
 2. yarn (package manager)
 
 ## 🔥 How to run the Application
-1. Go to the Project Repository 
+1. Go to the Project Folder in the terminal
 2. Enter the following command to install all Dependencies
 ```terminal
 yarn install
