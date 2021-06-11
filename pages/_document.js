@@ -15,9 +15,20 @@ export default class MyDocument extends Document {
             href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap"
           />
         </Head>
-        <body>
+        <body style={{ maxWidth: "1920px" }}>
           <Main />
           <NextScript />
+          <div
+            style={{
+              textAlign: "center",
+              backgroundColor: "#fff",
+              color: "#222F3E",
+              marginTop: "1rem"
+            }}
+          >
+            Made with ❤ by{" "}
+            <a href="https://github.com/saikiranrudra">Saikiran Rudra</a>
+          </div>
         </body>
       </Html>
     );
