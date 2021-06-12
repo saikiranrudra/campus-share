@@ -1,7 +1,7 @@
 import Image from "next/image";
-import useMediaQuery from "@material-ui/core/useMediaQuery";
+import Link from "next/link";
 import { Button, Typography } from "@material-ui/core";
-import Logo from "../src/components/Logo";
+import Nav from "./../src/components/Nav";
 import { makeStyles } from "@material-ui/core/styles";
 
 const useStyles = makeStyles((theme) => ({
@@ -11,6 +11,7 @@ const useStyles = makeStyles((theme) => ({
     minHeight: "calc(100vh - (43px + 2rem))",
     [theme.breakpoints.down("md")]: {
       gridTemplateColumns: "1fr",
+      gridTemplateRows: "repeat(2, 1fr)",
     },
   },
   heroText: {
@@ -34,6 +35,8 @@ const useStyles = makeStyles((theme) => ({
   heroContent: {
     display: "grid",
     placeContent: "center",
+    padding: "1rem .8rem",
+    [theme.breakpoints.down("sm")]: {},
   },
   heroBtnGroup: {
     margin: "2.1rem 0",
@@ -62,9 +65,9 @@ const useStyles = makeStyles((theme) => ({
     alignItems: "center",
     borderRadius: "30% 70% 70% 30% / 35% 26% 74% 65%",
     backgroundColor: theme.palette.primary.light,
-    [theme.breakpoints.down("md")]: {
-      display: "none",
-    },
+    // [theme.breakpoints.down("md")]: {
+    //   display: "none",
+    // },
   },
 }));
 
@@ -72,9 +75,7 @@ const Index = () => {
   const classes = useStyles();
   return (
     <>
-      <nav style={{ margin: "1rem" }}>
-        <Logo appName={process.env.appName} />
-      </nav>
+      <Nav />
       <header className={classes.heroContainer}>
         <div className={classes.heroContent}>
           <Typography variant="h1" component="h1" className={classes.heroText}>
@@ -88,9 +89,11 @@ const Index = () => {
             An Inter Campus Delivery Service
           </Typography>
           <div className={classes.heroBtnGroup}>
-            <Button variant="contained" color="primary">
-              Let's get started!
-            </Button>
+            <Link href="/auth/signup">
+              <Button variant="contained" color="primary">
+                Let's get started!
+              </Button>
+            </Link>
             <Button color="primary">Already have a account ?</Button>
           </div>
         </div>
@@ -100,7 +103,7 @@ const Index = () => {
         </div>
       </header>
       <section className={classes.heroContainer}>
-        <div className={classes.heroContent} style={{ padding: "1rem 3rem" }}>
+        <div className={classes.heroContent}>
           <Typography
             variant="h1"
             component="h1"
@@ -143,21 +146,7 @@ const Index = () => {
         </div>
       </section>
       <section className={classes.heroContainer}>
-        <div className={classes.heroImage}>
-          <Image
-            src="/hero3.svg"
-            alt="hero image"
-            height="400"
-            width="480rem"
-          />
-        </div>
-
-        <div
-          className={classes.heroContent}
-          style={{
-            padding: "1rem 2.5rem",
-          }}
-        >
+        <div className={classes.heroContent}>
           <Typography
             variant="h1"
             component="h1"
@@ -185,6 +174,15 @@ const Index = () => {
               Start making money!
             </Button>
           </div>
+        </div>
+
+        <div className={classes.heroImage}>
+          <Image
+            src="/hero3.svg"
+            alt="hero image"
+            height="400"
+            width="480rem"
+          />
         </div>
       </section>
     </>

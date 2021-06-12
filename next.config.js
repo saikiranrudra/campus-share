@@ -1,15 +1,13 @@
 const {
   PHASE_DEVELOPMENT_SERVER,
   PHASE_PRODUCTION_SERVER,
-  PHASE_EXPORT,
 } = require("next/constants");
 
 module.exports = (phase, { defaultConfig }) => {
-  if (phase === {PHASE_DEVELOPMENT_SERVER}) {
+  if (phase === { PHASE_DEVELOPMENT_SERVER }) {
     return {
       env: {
         // env variables common for development phases
-        appName: "campus share",
       },
     };
   }
@@ -17,7 +15,6 @@ module.exports = (phase, { defaultConfig }) => {
     return {
       env: {
         // env variables common for production phases
-        appName: "campus share",
       },
     };
   }
