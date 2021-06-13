@@ -1,4 +1,4 @@
-import Logo from "./Logo";
+import Logo from "../utils/Logo";
 import PropTypes from "prop-types";
 
 /**
@@ -22,14 +22,22 @@ import PropTypes from "prop-types";
 
 const Nav = ({ logoWithName, children }) => {
   return (
-    <nav style={{ display: "flex", justifyContent: "space-between", padding: "1rem 1.2rem" }}>
-      <Logo withName={logoWithName} />
+    <nav
+      style={{
+        display: "flex",
+        justifyContent: "space-between",
+        padding: "1rem 1.2rem",
+      }}
+    >
+      <a href="/" style={{ textDecoration: "none", color: "inherit" }}>
+        <Logo withName={logoWithName} />
+      </a>
       <div>{children}</div>
     </nav>
   );
 };
 
-Nav.PropTypes = {
+Nav.propTypes = {
   /**
    * Weather you want name with logo or not
    */

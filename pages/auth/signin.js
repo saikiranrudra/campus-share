@@ -4,12 +4,12 @@ import AuthForm from "./../../src/components/auth/AuthForm";
  * Sign up Page for account Creation
  */
 
-const Signup = () => {
+const Signin = () => {
   return (
     <>
-      <AuthForm type="SIGN_UP" header="Create Account" />
+      <AuthForm type="SIGN_IN" header="SIGN IN" />
     </>
   );
 };
 
-export default Signup;
+export default Signin;

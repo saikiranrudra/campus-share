@@ -47,5 +47,5 @@ Logo.propTypes = {
 };
 
 Logo.defaultProps = {
-  withName: false
-}
+  withName: false,
+};

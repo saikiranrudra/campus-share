@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Button, Typography } from "@material-ui/core";
-import Nav from "./../src/components/Nav";
+import Nav from "./../src/components/layout/Nav";
 import { makeStyles } from "@material-ui/core/styles";
 
 const useStyles = makeStyles((theme) => ({
@@ -65,11 +65,15 @@ const useStyles = makeStyles((theme) => ({
     alignItems: "center",
     borderRadius: "30% 70% 70% 30% / 35% 26% 74% 65%",
     backgroundColor: theme.palette.primary.light,
-    // [theme.breakpoints.down("md")]: {
-    //   display: "none",
-    // },
+  },
+  cta: {
+    margin: ".8rem 0",
   },
 }));
+
+/**
+ * The Main Index Page
+ */
 
 const Index = () => {
   const classes = useStyles();
@@ -94,7 +98,9 @@ const Index = () => {
                 Let's get started!
               </Button>
             </Link>
-            <Button color="primary">Already have a account ?</Button>
+            <Link href="/auth/signin">
+              <Button color="primary">Already have a account ?</Button>
+            </Link>
           </div>
         </div>
 
@@ -127,7 +133,7 @@ const Index = () => {
           </Typography>
           <br />
           <div>
-            <Button variant="contained" color="primary">
+            <Button variant="contained" color="primary" className={classes.cta}>
               Post you Request!
             </Button>
           </div>
@@ -139,9 +145,9 @@ const Index = () => {
         >
           <Image
             src="/hero2.svg"
-            alt="hero image"
-            height="520"
-            width="600rem"
+            alt="Fast Delivery"
+            height="520px"
+            width="600px"
           />
         </div>
       </section>
@@ -170,18 +176,21 @@ const Index = () => {
           </Typography>
           <br />
           <div>
-            <Button variant="contained" color="primary">
+            <Button variant="contained" color="primary" className={classes.cta}>
               Start making money!
             </Button>
           </div>
         </div>
 
-        <div className={classes.heroImage}>
+        <div
+          className={classes.heroImage}
+          style={{ width: "80%", justifySelf: "end", marginRight: "1rem" }}
+        >
           <Image
             src="/hero3.svg"
-            alt="hero image"
-            height="400"
-            width="480rem"
+            alt="Earn Money"
+            height="400px"
+            width="480px"
           />
         </div>
       </section>
