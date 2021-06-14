@@ -2,8 +2,8 @@
 An Inter Campus Delivery Service
 
 ## ☸ Technologies Required
-1. Node js
-2. yarn (package manager)
+1. [Node js](https://www.youtube.com/watch?v=AuCuHvgOeBY)
+2. [yarn (package manager)](https://www.youtube.com/watch?v=TyGCZZaY0yc)
 
 ## 🔥 How to run the Application
 1. Go to the Project Folder in the terminal
