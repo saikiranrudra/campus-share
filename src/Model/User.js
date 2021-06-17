@@ -1,77 +1,105 @@
 const mongoose = require("mongoose");
 const validator = require("validator");
+const bcrypt = require("bcrypt");
 
+/**
+ * User Collection Schema
+ */
 const userSchema = new mongoose.Schema({
   fullName: {
     type: String,
-    required: [true, "Full Name is required!"]
+    required: [true, "Full Name is required!"],
   },
   email: {
     type: String,
     required: [true, "Email is required"],
     unique: true,
     lowercase: true,
-    validate: [validator.isEmail, "Email Provided is Invalid"]
+    validate: [validator.isEmail, "Email Provided is Invalid"],
   },
   avatar: {
     type: String,
-    required: [true, "Your Photo is required"]
+    required: [true, "Your Photo is required"],
   },
   role: {
     type: String,
     enum: ["user", "admin"],
-    default: "user"
+    default: "user",
   },
   password: {
     type: String,
     required: [true, "Enter your Password"],
-    select: false
-  },
-  confirmPassword: {
-    type: String,
-    required: [true, "confirm password is required"],
-    validate: {
-      // This only works on create and save
-      validator: function(el) {
-        return el === this.password
-      },
-      message: "password is not same"
-    }
+    select: false,
   },
   college: {
     type: String,
-    required: [true, "College name is required"]
+    required: [true, "College name is required"],
   },
   collegeId: {
     type: String,
-    required: [true, "College Id is required"]
+    required: [true, "College Id is required"],
   },
   adhaarId: {
     type: String,
-    required: [true, "Adhaar Id is required"]
+    required: [true, "Adhaar Id is required"],
   },
   adhaarNumber: Number,
   collegeEnrollmentNumber: Number,
   proofImage: String,
   proofVideo: String,
+  passwordChangedAt: Date,
+  passwordResetToken: String,
+  passwordResetExpires: Date,
   active: {
     type: Boolean,
     default: false,
   },
   createdAt: {
     type: Date,
-    default: Date.now
-  }
-})
+    default: Date.now,
+  },
+});
 
-userSchema.index({ email: 1 }, { unique: true })
+/**
+ * Indexing UserSchema
+ */
+userSchema.index({ email: 1 }, { unique: true });
 
-userSchema.virtual('firstName').get(function() {
-  return this.fullName.split(' ')[0]
-})
+/**
+ * Executed every time user document is saved
+ */
+userSchema.pre("save", async function (next) {
+  const password = await bcrypt.hash(this.password, 12);
+  this.password = password;
+  this.passwordChangedAt = Date.now();
+  next();
+});
 
-userSchema.virtual('lastName').get(function() {
-  return this.fullName.split(' ')[1]
-})
+/**
+ * Virtual Properties
+ */
+userSchema.virtual("firstName").get(function () {
+  return this.fullName.split(" ")[0];
+});
 
-export default mongoose.models.User || mongoose.model('User', userSchema)
+userSchema.virtual("lastName").get(function () {
+  return this.fullName.split(" ")[1];
+});
+
+/**
+ * To Check weather a password plain text is equal to encrpyted text
+ * @example
+ * const User from "./models/User"
+ * const isCorrect = await User.verifyPassword(plainTextPassword, encryptedPassword);
+ * @param {String} candidatePassword - plain text password to compare
+ * @param {String} userPassword - encrypted password
+ * @returns {boolean}
+ */
+userSchema.methods.verifyPassword = async function (
+  candidatePassword,
+  userPassword
+) {
+  return await bcrypt.compare(candidatePassword, userPassword);
+};
+
+export default mongoose.models.User || mongoose.model("User", userSchema);

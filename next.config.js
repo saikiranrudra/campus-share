@@ -15,6 +15,7 @@ module.exports = (phase, { defaultConfig }) => {
     return {
       env: {
         // env variables common for production phases
+        NEXTAUTH_URL="https://yourwebsite.com"
       },
     };
   }

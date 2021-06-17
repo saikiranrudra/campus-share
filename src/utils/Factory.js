@@ -1,5 +1,5 @@
 /**
- * A Reusable Crud Operations 
+ * A Reusable Crud Operations
  */
 
 /**
@@ -11,9 +11,13 @@
  * @returns {Array} - All the data of models which satisfy condition
  */
 const getByCondition = async (MODEL, condition = {}) => {
-  const data = await MODEL.find(condition);
-  return data;
-}
+  try {
+    const data = await MODEL.find(condition);
+    return data;
+  } catch (err) {
+    throw err;
+  }
+};
 
 /**
  * Create a new Object in the model collection
@@ -24,9 +28,13 @@ const getByCondition = async (MODEL, condition = {}) => {
  * @returns {Object} - Object created in the collextion
  */
 const create = async (MODEL, createData) => {
-  const data = await MODEL.create(createData);
-  res.status(201).json(data);
-}
+  try {
+    const data = await MODEL.create(createData);
+    return data;
+  } catch (err) {
+    throw err;
+  }
+};
 /**
  * Find Object by Id and update its content
  * @example
@@ -36,9 +44,13 @@ const create = async (MODEL, createData) => {
  * @param {Object} - Data which is to be added to the document
  */
 const findByIdAndUpdate = async (MODEL, id, newData) => {
-  const data = await MODEL.findByIdAndUpdate(id, newData, { new: true });
-  return data
-}
+  try {
+    const data = await MODEL.findByIdAndUpdate(id, newData, { new: true });
+    return data;
+  } catch (err) {
+    throw err;
+  }
+};
 
 /**
  * Find Object by Id and delete Object
@@ -49,13 +61,16 @@ const findByIdAndUpdate = async (MODEL, id, newData) => {
  * @returns {boolean} - True if object is successfully deleted
  */
 const findByIdAndDelete = async (MODEL, id) => {
-  await MODEL.findByIdAndDelete(id);
-  return true;
-}
+  try {
+    await MODEL.findByIdAndDelete(id);
+  } catch (err) {
+    throw err;
+  }
+};
 
 module.exports = {
   getByCondition,
   findByIdAndUpdate,
   findByIdAndDelete,
-  create
-}
+  create,
+};

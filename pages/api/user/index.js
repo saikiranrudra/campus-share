@@ -5,28 +5,45 @@ import Factory from "./../../../src/utils/Factory";
 const user = async (req, res) => {
   const { method } = req;
   await dbConnect();
+
   switch (method) {
     case "GET":
-      return res.status(200).json(await Factory.getByCondition(User, req.body));
+      try {
+        res.status(200).json(await Factory.getByCondition(User, req.body));
+      } catch (err) {
+        console.log(err);
+        res.status(500).json({ message: "something went wrong!" });
+      }
+      break;
     case "POST":
-      return res.status(201).json(await Factory.create(User, req.body));
-
+      try {
+        res.status(201).json(await Factory.create(User, req.body));
+      } catch (err) {
+        console.log(err);
+        res.status(500).json({ message: "something went wrong!" });
+      }
+      break;
     case "PUT":
-      res
-        .status(200)
-        .json(await Factory.findByIdAndUpdate(User, req.body._id, req.body));
+      try {
+        res
+          .status(200)
+          .json(await Factory.findByIdAndUpdate(User, req.body._id, req.body));
+      } catch (err) {
+        console.log(err);
+        res.status(500).json({ message: "something went wrong!" });
+      }
       break;
     case "DELETE": {
-      const isDeleted = await Factory.findByIdAndDelete(User, req.body._id);
-
-      if(isDeleted) {
-        res.status(204);
-      } else {
-        res.status(500).json({ message: "Something went wrong" })
+      try {
+        await Factory.findByIdAndDelete(User, req.body._id);
+      } catch (err) {
+        console.log(err);
+        res.status(500).json({ message: "something went wrong!" });
       }
+      break;
     }
     default:
-      res.status(404);
+      res.status(404).json({ message: "Route not found" });
   }
 };
 
