@@ -9,7 +9,7 @@ const useStyles = makeStyles((theme) => ({
     display: "grid",
     gridTemplateColumns: "repeat(2, 1fr)",
     minHeight: "calc(100vh - (43px + 2rem))",
-    [theme.breakpoints.down("md")]: {
+    [theme.breakpoints.down("sm")]: {
       gridTemplateColumns: "1fr",
       gridTemplateRows: "repeat(2, 1fr)",
     },
@@ -18,6 +18,9 @@ const useStyles = makeStyles((theme) => ({
     fontWeight: "bolder",
     fontSize: "4.5rem",
     textTransform: "uppercase",
+    [theme.breakpoints.down("md")]: {
+      fontSize: "3.5rem",
+    },
     [theme.breakpoints.down("xs")]: {
       fontSize: "2.9rem",
       textAlign: "center",
@@ -105,7 +108,7 @@ const Index = () => {
         </div>
 
         <div className={classes.heroImage}>
-          <Image src="/hero.svg" alt="hero image" height="400" width="480rem" />
+          <Image src="/hero.svg" alt="hero image" height="500" width="580rem" />
         </div>
       </header>
       <section className={classes.heroContainer}>

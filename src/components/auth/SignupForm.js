@@ -31,6 +31,7 @@ const initialFormValues = {
   confirmPassword: "",
   collegeId: {},
   adhaarCard: {},
+  avatar: {},
 };
 
 const validationSchema = Yup.object({
@@ -68,6 +69,13 @@ const validationSchema = Yup.object({
       (value) => ["image/png", "image/jpg", "image/jpeg"].includes[value.type]
     )
     .required("Adhaar Id is required to create account"),
+  avatar: Yup.mixed()
+    .test(
+      "fileType",
+      "Unsupported File format upload in (.png, .jpg, or .jpeg)",
+      (value) => ["image/png", "image/jpg", "image/jpeg"].includes[value.type]
+    )
+    .required("Your photo is required to create account"),
 });
 
 const SignupForm = () => {
@@ -97,7 +105,9 @@ const SignupForm = () => {
             onBlur={handleBlur}
             value={values.fullName}
             error={!!(errors.fullName && touched.fullName)}
-            helperText={!!(errors.fullName && touched.fullName) ? errors.fullName : ""}
+            helperText={
+              !!(errors.fullName && touched.fullName) ? errors.fullName : ""
+            }
           />
           <TextField
             label="Email"
@@ -119,7 +129,9 @@ const SignupForm = () => {
             onBlur={handleBlur}
             value={values.college}
             error={!!(errors.college && touched.college)}
-            helperText={!!(errors.college && touched.college) ? errors.college : ""}
+            helperText={
+              !!(errors.college && touched.college) ? errors.college : ""
+            }
           />
           <TextField
             label="Password"
@@ -130,7 +142,9 @@ const SignupForm = () => {
             onBlur={handleBlur}
             value={values.password}
             error={!!(errors.password && touched.password)}
-            helperText={!!(errors.password && touched.password) ? errors.password : ""}
+            helperText={
+              !!(errors.password && touched.password) ? errors.password : ""
+            }
           />
           <TextField
             label="Confirm Password"
@@ -141,7 +155,11 @@ const SignupForm = () => {
             onBlur={handleBlur}
             value={values.confirmPassword}
             error={!!(errors.confirmPassword && touched.confirmPassword)}
-            helperText={!!(errors.confirmPassword && touched.confirmPassword) ? errors.confirmPassword : ""}
+            helperText={
+              !!(errors.confirmPassword && touched.confirmPassword)
+                ? errors.confirmPassword
+                : ""
+            }
           />
           <Button
             color="primary"
@@ -168,6 +186,19 @@ const SignupForm = () => {
             // helperText={errors.adhaarCard}
           >
             Upload Adhaar Card
+          </Button>
+          <Button
+            color="primary"
+            variant="outlined"
+            type="file"
+            name="avatar"
+            onChange={handleChange}
+            onBlur={handleBlur}
+            value={values.avatar}
+            // error={!!(errors.avatar && touched.avatar)}
+            // helperText={errors.avatar}
+          >
+            Upload Your Photo (Should match with adhaar/Collage Id)
           </Button>
           <div style={{ margin: "2rem 0" }}>
             <Button

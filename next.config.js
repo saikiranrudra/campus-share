@@ -22,6 +22,7 @@ module.exports = (phase, { defaultConfig }) => {
     env: {
       // env variables common for all phases
       appName: "campus share",
+      MONGODB_URI: "mongodb://localhost:27017/campus-share"
     },
   };
 };

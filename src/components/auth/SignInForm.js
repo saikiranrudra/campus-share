@@ -17,6 +17,9 @@ const useStyles = makeStyles((theme) => ({
       textAlign: "left",
     },
   },
+  btnGroup: { 
+    margin: "2rem 0",
+  },
 }));
 
 const initialFormValues = {
@@ -75,7 +78,7 @@ const SigninForm = () => {
               !!(errors.password && touched.password) ? errors.password : ""
             }
           />
-          <div style={{ margin: "2rem 0" }}>
+          <div className={classes.btnGroup}>
             <Button
               variant="contained"
               color="primary"

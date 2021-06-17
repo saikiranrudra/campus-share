@@ -10,6 +10,14 @@ export default class MyDocument extends Document {
         <Head>
           {/* PWA primary color */}
           <meta name="theme-color" content={theme.palette.primary.main} />
+          <meta
+            name="description"
+            content="An Inter Campus Delivery Service Platform where user can get their items deliveried within the campus and user can even make money by delivering other user items"
+          />
+          <meta
+            name="keywords"
+            content="student, college, university, campus, delivery, money, speed delivery, connectivity"
+          />
           <link
             rel="stylesheet"
             href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap"
@@ -23,7 +31,7 @@ export default class MyDocument extends Document {
               textAlign: "center",
               backgroundColor: "#fff",
               color: "#222F3E",
-              marginTop: "1rem"
+              marginTop: "1rem",
             }}
           >
             Made with ❤ by{" "}
