@@ -1,7 +1,9 @@
+import { useCallback, useState } from "react";
 import { TextField, FormControl, Button } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { Formik } from "formik";
 import * as Yup from "yup";
+import campusShareAPI from "../../utils/Apis/campusShareAPI";
 
 const useStyles = makeStyles((theme) => ({
   form: {
@@ -38,10 +40,18 @@ const validationSchema = Yup.object({
 
 const SigninForm = () => {
   const classes = useStyles();
+  const [loading, setLoading] = useState(false); // set SignIn Button Loading or not
+
+  const handleSignIn = useCallback(async (values) => {
+    const { email, password } = values;
+    const result = await campusShareAPI.post('/api/auth/signin', { email, password })
+    console.log(result);
+  }, [campusShareAPI])
+
   return (
     <Formik
       initialValues={initialFormValues}
-      onSubmit={(values) => console.log(values)}
+      onSubmit={handleSignIn}
       validationSchema={validationSchema}
     >
       {({
@@ -85,8 +95,9 @@ const SigninForm = () => {
               type="submit"
               onClick={handleSubmit}
               style={{ marginRight: ".8rem" }}
+              loading={loading.toString()}
             >
-              Sign In
+              {loading ? "Loading..." : "Sign In" }
             </Button>
             <Button variant="contained" color="primary" onClick={resetForm}>
               Reset Form

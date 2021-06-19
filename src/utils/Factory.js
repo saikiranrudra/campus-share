@@ -41,11 +41,20 @@ const create = async (MODEL, createData) => {
  * const updatedUser: Object = await findByIdAndUpdate(User, "dasd2354dasd3a2sd46asd546asd13", { age: 21 })
  * @param {*} MODEL - Mongoose model Object
  * @param {String} id - Id which unique to the document
- * @param {Object} - Data which is to be added to the document
+ * @param {Object} newData - Data which is to be added to the document
+ * @returns {Object} - {n: 'number of document', nModified: 'number of document modified', ok: '1 success 0 failure'}
  */
 const findByIdAndUpdate = async (MODEL, id, newData) => {
   try {
-    const data = await MODEL.findByIdAndUpdate(id, newData, { new: true });
+    // do not update password from factory method
+    if (newData.password) {
+      delete newData.password;
+    }
+    const data = await MODEL.updateOne(
+      { _id: id },
+      { $set: newData },
+      { runValidators: true }
+    );
     return data;
   } catch (err) {
     throw err;
@@ -58,7 +67,7 @@ const findByIdAndUpdate = async (MODEL, id, newData) => {
  * const isUserDeleted: boolean = await findByIdAndDelete(User, "dasd5+6dsada565d4asd6a")
  * @param {*} MODEL - Mongoose model Object
  * @param {String} id  - Id which unique to the document
- * @returns {boolean} - True if object is successfully deleted
+ * @returns {Boolean} - True if object is successfully deleted
  */
 const findByIdAndDelete = async (MODEL, id) => {
   try {

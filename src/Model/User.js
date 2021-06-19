@@ -1,6 +1,6 @@
-const mongoose = require("mongoose");
-const validator = require("validator");
-const bcrypt = require("bcrypt");
+import mongoose from "mongoose";
+import validator from "validator";
+import { compare } from "bcrypt";
 
 /**
  * User Collection Schema
@@ -54,11 +54,7 @@ const userSchema = new mongoose.Schema({
     type: Boolean,
     default: false,
   },
-  createdAt: {
-    type: Date,
-    default: Date.now,
-  },
-});
+},{ timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' } });
 
 /**
  * Indexing UserSchema
@@ -99,7 +95,7 @@ userSchema.methods.verifyPassword = async function (
   candidatePassword,
   userPassword
 ) {
-  return await bcrypt.compare(candidatePassword, userPassword);
+  return await compare(candidatePassword, userPassword);
 };
 
 export default mongoose.models.User || mongoose.model("User", userSchema);
