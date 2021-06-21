@@ -1,5 +1,6 @@
+import Logger from "../utils/Logger";
 const onError = (err, req, res, next) => {
-  console.log(err);
+  Logger.error(err);
   // Use Error Logger here
   res.status(500).json({ 
     message: err.message,
