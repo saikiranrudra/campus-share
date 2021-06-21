@@ -1,12 +1,16 @@
 import User from "./../../../src/Model/User";
 import Factory from "./../../../src/utils/Factory";
-import router from "../../../src/middlewares/router";
 import userProtect from "../../../src/middlewares/userProtect";
+import nc from "next-connect";
+import onError from "./../../../src/middlewares/onError";
+import onNoMatch from "./../../../src/middlewares/onNoMatch";
+import dbConnectMiddleware from "./../../../src/middlewares/dbConnectMiddleware";
 
 // middlewares
 // import userProtect from "../../../src/middlewares/userProtect";\
 
-const user = router
+const user = nc({ onError, onNoMatch })
+  .use(dbConnectMiddleware)
   .use(userProtect)
   .get(async (req, res) =>
     res.status(200).json(await Factory.getByCondition(User, req.body))
@@ -19,9 +23,8 @@ const user = router
       .status(200)
       .json(await Factory.findByIdAndUpdate(User, req.body._id, req.body))
   )
-  .delete(
-    async (req, res) => res.status(204).json(await Factory.findByIdAndDelete(User, req.body._id))
+  .delete(async (req, res) =>
+    res.status(204).json(await Factory.findByIdAndDelete(User, req.body._id))
   );
-
 
 export default user;

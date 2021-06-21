@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 import validator from "validator";
-import { compare } from "bcrypt";
+import { compare, hash } from "bcrypt";
 
 /**
  * User Collection Schema
@@ -65,7 +65,7 @@ userSchema.index({ email: 1 }, { unique: true });
  * Executed every time user document is saved
  */
 userSchema.pre("save", async function (next) {
-  const password = await bcrypt.hash(this.password, 12);
+  const password = await hash(this.password, 12);
   this.password = password;
   this.passwordChangedAt = Date.now();
   next();

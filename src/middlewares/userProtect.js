@@ -13,7 +13,8 @@ const userProtect = async (req, res, next) => {
       throw new Error("Authorization token not found")
     }
     const tokenInfo = jwt.verify(token, secret);
-    if(tokenInfo.role !== "user" || tokenInfo.role !== "admin") {
+    console.log("Token Info: ", tokenInfo);
+    if(tokenInfo.role !== "user" && tokenInfo.role !== "admin") {
       throw new Error("User not Authorized to access this route")
     }
   } catch (error) {
