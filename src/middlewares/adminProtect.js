@@ -4,24 +4,22 @@ import jwt from "jsonwebtoken";
  * next-connect middleware check whether requester is admin or not
  */
 const adminProtect = (req, res, next) => {
-  const { authorization } = req.headers;
+  const secret = process.env.JWT_SECRET;
+  
   try {
-    if(!authorization) {
-      throw new Error("Authorization token not found")
-    }
+    const token = req.cookies.authentication;
 
-    const token = authorization.split(' ')[1];
-    
-    const secret = process.env.secret;
+    if(!token){
+      return res.status(400).json({ message: "Authentication token not found" })
+    }
     const tokenInfo = jwt.verify(token, secret);
 
     if(tokenInfo.role !== "admin") {
-      throw new Error("User not Authorized to access this route")
-    }
-  } catch(error) {
-    throw error;
+      return res.status(401).json({ message: "User is not Authorized to access this route" })
+    } 
+  } catch (error) {
+    throw error
   }
-
   next();
 }
 
