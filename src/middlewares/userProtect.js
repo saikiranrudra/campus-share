@@ -10,12 +10,12 @@ const userProtect = async (req, res, next) => {
     const token = req.cookies.authentication;
 
     if(!token) {
-      throw new Error("Authorization token not found")
+      return res.status(400).json({ message: "Authentication token not found" })
     }
     const tokenInfo = jwt.verify(token, secret);
-    console.log("Token Info: ", tokenInfo);
+    
     if(tokenInfo.role !== "user" && tokenInfo.role !== "admin") {
-      throw new Error("User not Authorized to access this route")
+      return res.status(401).json({ message: "User is not Authorized to access this route" })
     }
   } catch (error) {
     throw error
