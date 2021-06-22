@@ -8,12 +8,24 @@
  * const inActiveUser: Array = await getByCondition(User, { active: false })
  * @param MODEL - Mongoose model object
  * @param {Object} condition - condition to filter document
+ * @param {number} condition.pageNo - 0 based
  * @returns {Array} - All the data of models which satisfy condition
  */
-const getByCondition = async (MODEL, condition = {}) => {
+const getByCondition = async (MODEL, { pageNo = 0, ...query }) => {
   try {
-    const data = await MODEL.find(condition);
-    return data;
+    const LIMIT = 10;
+    console.log("query: ", query);
+    console.log("pageNo: ", pageNo);
+    const data = await MODEL.find(query)
+      .limit(LIMIT)
+      .skip(pageNo * LIMIT)
+      .exec();
+
+    return {
+      data,
+      count: data.length,
+      pageNo: PAGE_NO,
+    };
   } catch (err) {
     throw err;
   }
@@ -40,20 +52,20 @@ const create = async (MODEL, createData) => {
  * @example
  * const updatedUser: Object = await findByIdAndUpdate(User, "dasd2354dasd3a2sd46asd546asd13", { age: 21 })
  * @param {*} MODEL - Mongoose model Object
- * @param {String} id - Id which unique to the document
+ * @param {String} _id - _Id which unique to the mongodb document
  * @param {Object} newData - Data which is to be added to the document
  * @returns {Object} - {n: 'number of document', nModified: 'number of document modified', ok: '1 success 0 failure'}
  */
-const findByIdAndUpdate = async (MODEL, id, newData) => {
+const findByIdAndUpdate = async (MODEL, _id, newData) => {
   try {
     // do not update password from factory method
     if (newData.password) {
       delete newData.password;
     }
-    const data = await MODEL.updateOne(
-      { _id: id },
+    const data = await MODEL.findByIdAndUpdate(
+      _id,
       { $set: newData },
-      { runValidators: true }
+      { runValidators: true, new: true }
     );
     return data;
   } catch (err) {
