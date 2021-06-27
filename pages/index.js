@@ -72,6 +72,9 @@ const useStyles = makeStyles((theme) => ({
   cta: {
     margin: ".8rem 0",
   },
+  contentPoints: {
+    margin: ".4rem 0",
+  },
 }));
 
 /**
@@ -121,18 +124,30 @@ const Index = () => {
           >
             Fast Delivery
           </Typography>
-          <Typography variant="body1" component="h2">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut viverra
-            enim id commodo semper. Ut facilisis lobortis ante, ut auctor mi
-            pharetra accumsan. Nullam in aliquam nunc, ut hendrerit sapien.
-            Praesent et suscipit erat. Cras vitae tempor justo. Pellentesque in
-            leo eget orci gravida dignissim. Aliquam in justo et orci dictum
-            iaculis a at justo. Curabitur in enim et elit suscipit volutpat et
-            eu tellus. Nunc cursus eu sem in malesuada. Quisque sagittis auctor
-            libero ut scelerisque. Suspendisse vitae nisi turpis. Suspendisse
-            elit est, elementum eget lacus et, cursus eleifend nisi. Etiam quis
-            cursus libero, at porta neque. Duis quis porttitor velit. Sed
-            vulputate erat eget lacus placerat, ut aliquet lectus dignissim.
+          <Typography
+            variant="body1"
+            component="h2"
+            className={classes.contentPoints}
+          >
+            ✔ Do you have some stuff that needs to be delivered? Voila, you have
+            reached the right place.
+          </Typography>
+          <Typography
+            variant="body1"
+            component="h2"
+            className={classes.contentPoints}
+          >
+            ✔ We offer convenient, hassle-free, reliable delivery services at
+            affordable rates. On-time delivery? No damages? Best prices? We got
+            it all covered.
+          </Typography>
+          <Typography
+            variant="body1"
+            component="h2"
+            className={classes.contentPoints}
+          >
+            ✔ Helping you connect better, connect further. We are here to make
+            your couriers fly.
           </Typography>
           <br />
           <div>
@@ -164,20 +179,30 @@ const Index = () => {
           >
             Earn Money
           </Typography>
-          <Typography variant="body1" component="h2">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut viverra
-            enim id commodo semper. Ut facilisis lobortis ante, ut auctor mi
-            pharetra accumsan. Nullam in aliquam nunc, ut hendrerit sapien.
-            Praesent et suscipit erat. Cras vitae tempor justo. Pellentesque in
-            leo eget orci gravida dignissim. Aliquam in justo et orci dictum
-            iaculis a at justo. Curabitur in enim et elit suscipit volutpat et
-            eu tellus. Nunc cursus eu sem in malesuada. Quisque sagittis auctor
-            libero ut scelerisque. Suspendisse vitae nisi turpis. Suspendisse
-            elit est, elementum eget lacus et, cursus eleifend nisi. Etiam quis
-            cursus libero, at porta neque. Duis quis porttitor velit. Sed
-            vulputate erat eget lacus placerat, ut aliquet lectus dignissim.
+          <Typography
+            variant="body1"
+            component="h2"
+            className={classes.contentPoints}
+          >
+            ✔ Want to make some quick money in your spare time? Then welcome on
+            board!
           </Typography>
-          <br />
+          <Typography
+            variant="body1"
+            component="h2"
+            className={classes.contentPoints}
+          >
+            ✔ Campus share, a platform that allows people to get paid in return
+            for successfully completing deliveries.
+          </Typography>
+          <Typography
+            variant="body1"
+            component="h2"
+            className={classes.contentPoints}
+          >
+            ✔ Transparent policies, accountable process, competitive wages, work
+            at self-pace, satisfaction.
+          </Typography>
           <div>
             <Button variant="contained" color="primary" className={classes.cta}>
               Start making money!

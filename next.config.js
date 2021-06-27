@@ -8,7 +8,6 @@ module.exports = (phase) => {
     return {
       env: {
         // env variables common for development phases
-        BASE_URL: 'http://localhost:3000'
       },
     };
   }
@@ -16,7 +15,6 @@ module.exports = (phase) => {
     return {
       env: {
         // env variables common for production phases
-        NEXTAUTH_URL:"https://yourwebsite.com"
       },
     };
   }
@@ -28,7 +26,8 @@ module.exports = (phase) => {
       JWT_SECRET: 'thisisasecreatkeywhichwillbechangedhereaswellasinproduction',
       JWT_EXPIRE_IN: '2 days',
       COOKIE_EXPIRE_IN: 60 * 60 * 24 * 2, // 2 days
-      isHTTPS: false
+      isHTTPS: false,
+      BASE_URL: 'http://localhost:3000'
     },
   };
 };

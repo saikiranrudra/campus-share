@@ -10,7 +10,7 @@ const userProtect = async (req, res, next) => {
     const token = req.cookies.authentication;
 
     if(!token) {
-      return res.status(400).json({ message: "Authentication token not found" })
+      return res.status(401).json({ message: "Authentication token not found" })
     }
     const tokenInfo = jwt.verify(token, secret);
     
