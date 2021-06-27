@@ -9,7 +9,6 @@ import MuiAlert from "@material-ui/lab/Alert";
 import validationSchema, {
   initialValues,
 } from "./../../validations/auth/signup";
-import Logger from "./../../utils/Logger";
 
 const useStyles = makeStyles((theme) => ({
   form: {
@@ -44,9 +43,10 @@ const SignupForm = () => {
   const classes = useStyles();
   const [btnState, setBtnState] = useState({
     isLoading: false,
-    error: "",
+    type: "success",
+    message: "",
   });
-  const [showError, setShowError] = useState(false);
+  const [showResponse, setShowResponse] = useState(false);
 
   const loadColleges = useCallback(async (inputValue = "") => {
     const res = await axios.get("/api/college", { name: inputValue });
@@ -61,22 +61,41 @@ const SignupForm = () => {
     handleChange("college")(currentSelected.value);
   };
 
-  const handleFormSubmit = async (values) => {
-    try {
-      setBtnState({ isLoading: true, error: "" });
-      const res = await axios.post("/api/user", values);
-    } catch (err) {
-      console.log("Error: ", err.message);
-      setBtnState({ isLoading: false, error: err.message });
-      setShowError(true);
-    }
+  const handleFormSubmit = (values) => {
+    setBtnState({ isLoading: true, ...btnState });
+    axios
+      .post("/api/user", values)
+      .then(() => {
+        setBtnState({
+          isLoading: false,
+          message: "Account Created Successfully",
+          type: "success",
+        });
+        setShowResponse(true);
+      })
+      .catch((err) => {
+        if (err.response) {
+          setBtnState({
+            isLoading: false,
+            message: err.response.data.message,
+            type: "error",
+          });
+        } else {
+          setBtnState({
+            isLoading: false,
+            message: err.message,
+            type: "error",
+          });
+        }
+        setShowResponse(true);
+      });
   };
 
-  const handleCloseError = (event, reason) => {
+  const handleCloseResponse = (event, reason) => {
     if (reason === "clickaway") {
       return;
     }
-    setShowError(false);
+    setShowResponse(false);
   };
 
   return (
@@ -221,12 +240,12 @@ const SignupForm = () => {
         )}
       </Formik>
       <Snackbar
-        open={showError}
-        autoHideDuration={6000}
-        onClose={handleCloseError}
+        open={showResponse}
+        autoHideDuration={5000}
+        onClose={handleCloseResponse}
       >
-        <Alert onClose={handleCloseError} severity="error">
-          {btnState.error}
+        <Alert onClose={handleCloseResponse} severity={btnState.type}>
+          {btnState.message}
         </Alert>
       </Snackbar>
     </>

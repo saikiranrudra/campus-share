@@ -14,8 +14,6 @@
 const getByCondition = async (MODEL, { pageNo = 0, ...query }) => {
   try {
     const LIMIT = 10;
-    console.log("query: ", query);
-    console.log("pageNo: ", pageNo);
     const data = await MODEL.find(query)
       .limit(LIMIT)
       .skip(pageNo * LIMIT)
