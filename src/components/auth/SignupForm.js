@@ -1,7 +1,15 @@
-import { TextField, Button, FormControl } from "@material-ui/core";
+import { useCallback, useState } from "react";
+import { TextField, Button, FormControl, Typography } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { Formik } from "formik";
-import * as Yup from "yup";
+import AsyncSelect from "react-select/async";
+import axios from "axios";
+import Snackbar from "@material-ui/core/Snackbar";
+import MuiAlert from "@material-ui/lab/Alert";
+import validationSchema, {
+  initialValues,
+} from "./../../validations/auth/signup";
+import Logger from "./../../utils/Logger";
 
 const useStyles = makeStyles((theme) => ({
   form: {
@@ -16,207 +24,212 @@ const useStyles = makeStyles((theme) => ({
       margin: ".3rem 0",
       textAlign: "left",
     },
+    "& > .css-2b097c-container": {
+      color: "black",
+      zIndex: "2",
+    },
   },
 }));
+
+// Alert error Component
+function Alert(props) {
+  return <MuiAlert elevation={6} variant="filled" {...props} />;
+}
 
 /**
  * Sign up from for user to create account
  */
 
-const initialFormValues = {
-  fullName: "",
-  email: "",
-  college: "",
-  password: "",
-  confirmPassword: "",
-  collegeId: {},
-  adhaarCard: {},
-  avatar: {},
-};
-
-const validationSchema = Yup.object({
-  fullName: Yup.string()
-    .required("full name is required")
-    .test(
-      "word-count",
-      "Full Name must have atleast first name and last name",
-      (val) => val && val.split(" ").length >= 2
-    ),
-  email: Yup.string()
-    .required("Email is required to create account")
-    .email("Invalid Email format"),
-  college: Yup.string().required("College name is required to create account"),
-  password: Yup.string()
-    .matches(
-      /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/,
-      "Must Contain 8 Characters, One Uppercase, One Lowercase, One Number and one special case Character"
-    )
-    .required("Password is required to create account"),
-  confirmPassword: Yup.string()
-    .oneOf([Yup.ref("password")], "Password and Confirm Password dosnt match")
-    .required("Enter confirm password"),
-  collegeId: Yup.mixed()
-    .test(
-      "fileType",
-      "Unsupported File format upload in (.png, .jpg, or .jpeg)",
-      (value) => ["image/png", "image/jpg", "image/jpeg"].includes[value.type]
-    )
-    .required("College Id is required to create account"),
-  collegeId: Yup.mixed()
-    .test(
-      "fileType",
-      "Unsupported File format upload in (.png, .jpg, or .jpeg)",
-      (value) => ["image/png", "image/jpg", "image/jpeg"].includes[value.type]
-    )
-    .required("Adhaar Id is required to create account"),
-  avatar: Yup.mixed()
-    .test(
-      "fileType",
-      "Unsupported File format upload in (.png, .jpg, or .jpeg)",
-      (value) => ["image/png", "image/jpg", "image/jpeg"].includes[value.type]
-    )
-    .required("Your photo is required to create account"),
-});
-
 const SignupForm = () => {
   const classes = useStyles();
+  const [btnState, setBtnState] = useState({
+    isLoading: false,
+    error: "",
+  });
+  const [showError, setShowError] = useState(false);
+
+  const loadColleges = useCallback(async (inputValue = "") => {
+    const res = await axios.get("/api/college", { name: inputValue });
+    const data = res.data.data.map((college) => ({
+      label: college.name,
+      value: college._id,
+    }));
+    return data;
+  }, []);
+
+  const handleSelect = (currentSelected, handleChange) => {
+    handleChange("college")(currentSelected.value);
+  };
+
+  const handleFormSubmit = async (values) => {
+    try {
+      setBtnState({ isLoading: true, error: "" });
+      const res = await axios.post("/api/user", values);
+    } catch (err) {
+      console.log("Error: ", err.message);
+      setBtnState({ isLoading: false, error: err.message });
+      setShowError(true);
+    }
+  };
+
+  const handleCloseError = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setShowError(false);
+  };
+
   return (
-    <Formik
-      initialValues={initialFormValues}
-      onSubmit={(values) => console.log(values)}
-      validationSchema={validationSchema}
-    >
-      {({
-        values,
-        errors,
-        touched,
-        handleChange,
-        handleBlur,
-        handleSubmit,
-        resetForm,
-      }) => (
-        <FormControl className={classes.form}>
-          <TextField
-            label="Full Name (same as in adhaar card)"
-            variant="outlined"
-            type="text"
-            name="fullName"
-            onChange={handleChange}
-            onBlur={handleBlur}
-            value={values.fullName}
-            error={!!(errors.fullName && touched.fullName)}
-            helperText={
-              !!(errors.fullName && touched.fullName) ? errors.fullName : ""
-            }
-          />
-          <TextField
-            label="Email"
-            variant="outlined"
-            type="email"
-            name="email"
-            onChange={handleChange}
-            onBlur={handleBlur}
-            value={values.email}
-            error={!!(errors.email && touched.email)}
-            helperText={!!(errors.email && touched.email) ? errors.email : ""}
-          />
-          <TextField
-            label="Select College / University"
-            variant="outlined"
-            type="text"
-            name="college"
-            onChange={handleChange}
-            onBlur={handleBlur}
-            value={values.college}
-            error={!!(errors.college && touched.college)}
-            helperText={
-              !!(errors.college && touched.college) ? errors.college : ""
-            }
-          />
-          <TextField
-            label="Password"
-            variant="outlined"
-            type="password"
-            name="password"
-            onChange={handleChange}
-            onBlur={handleBlur}
-            value={values.password}
-            error={!!(errors.password && touched.password)}
-            helperText={
-              !!(errors.password && touched.password) ? errors.password : ""
-            }
-          />
-          <TextField
-            label="Confirm Password"
-            variant="outlined"
-            type="password"
-            name="confirmPassword"
-            onChange={handleChange}
-            onBlur={handleBlur}
-            value={values.confirmPassword}
-            error={!!(errors.confirmPassword && touched.confirmPassword)}
-            helperText={
-              !!(errors.confirmPassword && touched.confirmPassword)
-                ? errors.confirmPassword
-                : ""
-            }
-          />
-          <Button
-            color="primary"
-            variant="outlined"
-            type="file"
-            name="collegeId"
-            onChange={handleChange}
-            onBlur={handleBlur}
-            value={values.collegeId}
-            // error={!!(errors.collegeId && touched.collegeId)}
-            // helperText={errors.collegeId}
-          >
-            Upload College Id Card
-          </Button>
-          <Button
-            color="primary"
-            variant="outlined"
-            type="file"
-            name="adhaarCard"
-            onChange={handleChange}
-            onBlur={handleBlur}
-            value={values.adhaarCard}
-            // error={!!(errors.adhaarCard && touched.adhaarCard)}
-            // helperText={errors.adhaarCard}
-          >
-            Upload Adhaar Card
-          </Button>
-          <Button
-            color="primary"
-            variant="outlined"
-            type="file"
-            name="avatar"
-            onChange={handleChange}
-            onBlur={handleBlur}
-            value={values.avatar}
-            // error={!!(errors.avatar && touched.avatar)}
-            // helperText={errors.avatar}
-          >
-            Upload Your Photo (Should match with adhaar/Collage Id)
-          </Button>
-          <div style={{ margin: "2rem 0" }}>
-            <Button
-              variant="contained"
-              color="primary"
-              type="submit"
-              onClick={handleSubmit}
-              style={{ marginRight: ".8rem" }}
-            >
-              Creact Account
-            </Button>
-            <Button variant="contained" color="primary" onClick={resetForm}>
-              Reset Form
-            </Button>
-          </div>
-        </FormControl>
-      )}
-    </Formik>
+    <>
+      <Formik
+        initialValues={initialValues}
+        onSubmit={handleFormSubmit}
+        validationSchema={validationSchema}
+      >
+        {({
+          values,
+          errors,
+          touched,
+          handleChange,
+          handleBlur,
+          handleSubmit,
+          resetForm,
+        }) => (
+          <FormControl className={classes.form}>
+            <TextField
+              label="Full Name (same as in adhaar card)"
+              variant="outlined"
+              type="text"
+              name="fullName"
+              onChange={handleChange}
+              onBlur={handleBlur}
+              value={values.fullName}
+              error={!!(errors.fullName && touched.fullName)}
+              helperText={
+                !!(errors.fullName && touched.fullName) ? errors.fullName : ""
+              }
+            />
+            <TextField
+              label="Email"
+              variant="outlined"
+              type="email"
+              name="email"
+              onChange={handleChange}
+              onBlur={handleBlur}
+              value={values.email}
+              error={!!(errors.email && touched.email)}
+              helperText={!!(errors.email && touched.email) ? errors.email : ""}
+            />
+            <TextField
+              label="Password"
+              variant="outlined"
+              type="password"
+              name="password"
+              onChange={handleChange}
+              onBlur={handleBlur}
+              value={values.password}
+              error={!!(errors.password && touched.password)}
+              helperText={
+                !!(errors.password && touched.password) ? errors.password : ""
+              }
+            />
+            <TextField
+              label="Confirm Password"
+              variant="outlined"
+              type="password"
+              name="confirmPassword"
+              onChange={handleChange}
+              onBlur={handleBlur}
+              value={values.confirmPassword}
+              error={!!(errors.confirmPassword && touched.confirmPassword)}
+              helperText={
+                !!(errors.confirmPassword && touched.confirmPassword)
+                  ? errors.confirmPassword
+                  : ""
+              }
+            />
+            <TextField
+              label="adhaar Number"
+              variant="outlined"
+              type="text"
+              name="adhaarNumber"
+              onChange={handleChange}
+              onBlur={handleBlur}
+              value={values.adhaarNumber}
+              error={!!(errors.adhaarNumber && touched.adhaarNumber)}
+              helperText={
+                !!(errors.adhaarNumber && touched.adhaarNumber)
+                  ? errors.adhaarNumber
+                  : ""
+              }
+            />
+            <TextField
+              label="College Enrollment Number"
+              variant="outlined"
+              type="text"
+              name="collegeEnrollmentNumber"
+              onChange={handleChange}
+              onBlur={handleBlur}
+              value={values.collegeEnrollmentNumber}
+              error={
+                !!(
+                  errors.collegeEnrollmentNumber &&
+                  touched.collegeEnrollmentNumber
+                )
+              }
+              helperText={
+                !!(
+                  errors.collegeEnrollmentNumber &&
+                  touched.collegeEnrollmentNumber
+                )
+                  ? errors.collegeEnrollmentNumber
+                  : ""
+              }
+            />
+            <AsyncSelect
+              cacheOptions
+              instanceId="collegeName"
+              defaultOptions={false}
+              isClearable
+              placeholder="Enter your College Name"
+              onChange={(val) => {
+                handleSelect(val, handleChange);
+              }}
+              loadOptions={loadColleges}
+            />
+            {!!(errors.college && touched.college) ? (
+              <Typography style={{ color: "red" }} variant="caption">
+                {errors.college}
+              </Typography>
+            ) : null}
+            <div style={{ margin: "2rem 0" }}>
+              <Button
+                variant="contained"
+                color="primary"
+                type="submit"
+                onClick={handleSubmit}
+                style={{ marginRight: ".8rem" }}
+                disabled={btnState.isLoading}
+              >
+                {btnState.isLoading ? "loading..." : "Create Account"}
+              </Button>
+              <Button variant="contained" color="primary" onClick={resetForm}>
+                Reset Form
+              </Button>
+            </div>
+          </FormControl>
+        )}
+      </Formik>
+      <Snackbar
+        open={showError}
+        autoHideDuration={6000}
+        onClose={handleCloseError}
+      >
+        <Alert onClose={handleCloseError} severity="error">
+          {btnState.error}
+        </Alert>
+      </Snackbar>
+    </>
   );
 };
 

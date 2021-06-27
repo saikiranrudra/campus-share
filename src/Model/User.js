@@ -19,7 +19,7 @@ const userSchema = new mongoose.Schema({
   },
   avatar: {
     type: String,
-    required: [true, "Your Photo is required"],
+    default: "/avatar.png"
   },
   role: {
     type: String,
@@ -32,19 +32,26 @@ const userSchema = new mongoose.Schema({
     select: false,
   },
   college: {
-    type: String,
+    type: mongoose.Schema.Types.ObjectId,
     required: [true, "College name is required"],
+    ref: 'College'
   },
-  collegeId: {
+  collegeId: String,
+  adhaarId: String,
+  adhaarNumber: {
     type: String,
-    required: [true, "College Id is required"],
+    validate: {
+      validator: function(val) { // Adhaar card number should be 12 char long
+        return val.length === 12
+      }, 
+      message: "Adhaar Card number must be 12 character long"
+    },
+    required: [true, "Adhaar Number is required"]
   },
-  adhaarId: {
+  collegeEnrollmentNumber: {
     type: String,
-    required: [true, "Adhaar Id is required"],
+    required: [true, "College Enrollment Number is required"]
   },
-  adhaarNumber: Number,
-  collegeEnrollmentNumber: Number,
   proofImage: String,
   proofVideo: String,
   passwordChangedAt: Date,

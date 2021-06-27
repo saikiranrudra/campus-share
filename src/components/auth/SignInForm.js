@@ -45,7 +45,6 @@ const SigninForm = () => {
   const handleSignIn = useCallback(async (values) => {
     const { email, password } = values;
     const result = await campusShareAPI.post('/api/auth/signin', { email, password })
-    console.log(result);
   }, [campusShareAPI])
 
   return (

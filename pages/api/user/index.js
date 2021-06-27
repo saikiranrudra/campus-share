@@ -11,12 +11,12 @@ import dbConnectMiddleware from "./../../../src/middlewares/dbConnectMiddleware"
 
 const user = nc({ onError, onNoMatch })
   .use(dbConnectMiddleware)
+  .post(async (req, res) =>
+    res.status(201).json(await Factory.create(User, req.body))
+  )
   .use(userProtect)
   .get(async (req, res) =>
     res.status(200).json(await Factory.getByCondition(User, req.body))
-  )
-  .post(async (req, res) =>
-    res.status(201).json(await Factory.create(User, req.body))
   )
   .put(async (req, res) =>
     res

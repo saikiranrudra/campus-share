@@ -24,7 +24,7 @@ const getByCondition = async (MODEL, { pageNo = 0, ...query }) => {
     return {
       data,
       count: data.length,
-      pageNo: PAGE_NO,
+      pageNo: pageNo,
     };
   } catch (err) {
     throw err;
