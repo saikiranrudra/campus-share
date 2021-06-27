@@ -93,7 +93,7 @@ const Index = () => {
             component="h2"
             className={classes.heroCaption}
           >
-            An Inter Campus Delivery Service
+            An Intra Campus Delivery Service
           </Typography>
           <div className={classes.heroBtnGroup}>
             <Link href="/auth/signup">
