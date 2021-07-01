@@ -4,8 +4,6 @@ import { makeStyles } from "@material-ui/core/styles";
 import { Formik } from "formik";
 import AsyncSelect from "react-select/async";
 import axios from "axios";
-import Snackbar from "@material-ui/core/Snackbar";
-import MuiAlert from "@material-ui/lab/Alert";
 import validationSchema, {
   initialValues,
 } from "./../../validations/auth/signup";
@@ -30,24 +28,13 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-// Alert Notification Component
-function Alert(props) {
-  return <MuiAlert elevation={6} variant="filled" {...props} />;
-}
 
 /**
  * Sign up from for user to create account
  */
 
-const SignupForm = () => {
+const SignupForm = ({ setShowNotification, btnState, setBtnState }) => {
   const classes = useStyles();
-  const [btnState, setBtnState] = useState({
-    isLoading: false,
-    type: "success",
-    message: "",
-  });
-  const [showResponse, setShowResponse] = useState(false);
-
   const loadColleges = useCallback(async (inputValue = "") => {
     const res = await axios.get("/api/college", { name: inputValue });
     const data = res.data.data.map((college) => ({
@@ -68,10 +55,10 @@ const SignupForm = () => {
       .then(() => {
         setBtnState({
           isLoading: false,
-          message: "Account Created Successfully",
+          message: "Account Created Successfully Please Sign In",
           type: "success",
         });
-        setShowResponse(true);
+        setShowNotification(true);
       })
       .catch((err) => {
         if (err.response) {
@@ -87,15 +74,8 @@ const SignupForm = () => {
             type: "error",
           });
         }
-        setShowResponse(true);
+        setShowNotification(true);
       });
-  };
-
-  const handleCloseResponse = (event, reason) => {
-    if (reason === "clickaway") {
-      return;
-    }
-    setShowResponse(false);
   };
 
   return (
@@ -230,7 +210,7 @@ const SignupForm = () => {
                 style={{ marginRight: ".8rem" }}
                 disabled={btnState.isLoading}
               >
-                {btnState.isLoading ? "loading..." : "Create Account"}
+                {btnState.isLoading ? "Please Wait..." : "Create Account"}
               </Button>
               <Button variant="contained" color="primary" onClick={resetForm}>
                 Reset Form
@@ -239,15 +219,6 @@ const SignupForm = () => {
           </FormControl>
         )}
       </Formik>
-      <Snackbar
-        open={showResponse}
-        autoHideDuration={5000}
-        onClose={handleCloseResponse}
-      >
-        <Alert onClose={handleCloseResponse} severity={btnState.type}>
-          {btnState.message}
-        </Alert>
-      </Snackbar>
     </>
   );
 };

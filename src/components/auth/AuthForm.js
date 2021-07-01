@@ -1,3 +1,4 @@
+import { useState } from "react"
 import Image from "next/image";
 import Head from "next/head";
 import Link from "next/link";
@@ -7,7 +8,7 @@ import SignupForm from "./SignupForm";
 import { makeStyles } from "@material-ui/core/styles";
 import SigninForm from "./SignInForm";
 import PropTypes from "prop-types";
-import MuiAlert from '@material-ui/lab/Alert';
+import MuiAlert from "@material-ui/lab/Alert";
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -16,7 +17,7 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: "space-evenly",
     [theme.breakpoints.down("sm")]: {
       flexDirection: "column-reverse",
-      margin: "0 1rem"
+      margin: "0 1rem",
     },
   },
   heroText: {
@@ -52,8 +53,17 @@ const AuthForm = ({ header, type }) => {
   const [btnState, setBtnState] = useState({
     isLoading: false,
     message: "",
-    type: "success"
-  })
+    type: "success",
+  });
+  const [showNotification, setShowNotification] = useState(false);
+
+  const handleCloseNotification = () => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setShowNotification(false);
+  };
+
   return (
     <>
       <Head>
@@ -87,17 +97,39 @@ const AuthForm = ({ header, type }) => {
           style={{ alignSelf: "center", justifySelf: "center" }}
         />
         <div
-        style={{
-          alignSelf: type === "SIGN_IN" ? "center" : null
-        }}>
+          style={{
+            alignSelf: type === "SIGN_IN" ? "center" : null,
+          }}
+        >
           <Typography variant="h2" component="h1" className={classes.heroText}>
             Welcome to{" "}
             <span className={classes.primaryColor}>Campus Share</span>
           </Typography>
           <Typography variant="body1">Authenticate Yourself</Typography>
 
-          {type === "SIGN_UP" ? <SignupForm /> : <SigninForm />}
+          {type === "SIGN_UP" ? (
+            <SignupForm
+              setBtnState={setBtnState}
+              btnState={btnState}
+              setShowNotification={setShowNotification}
+            />
+          ) : (
+            <SigninForm
+              setBtnState={setBtnState}
+              btnState={btnState}
+              setShowNotification={setShowNotification}
+            />
+          )}
         </div>
+        <Snackbar
+          open={showNotification}
+          autoHideDuration={6000}
+          onClose={handleCloseNotification}
+        >
+          <Alert onClose={handleCloseNotification} severity={btnState.type}>
+            {btnState.message}
+          </Alert>
+        </Snackbar>
       </section>
     </>
   );

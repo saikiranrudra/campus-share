@@ -1,4 +1,5 @@
-import { useCallback, useState } from "react";
+import { useCallback } from "react";
+import { useRouter } from "next/router";
 import { TextField, FormControl, Button } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { Formik } from "formik";
@@ -19,7 +20,7 @@ const useStyles = makeStyles((theme) => ({
       textAlign: "left",
     },
   },
-  btnGroup: { 
+  btnGroup: {
     margin: "2rem 0",
   },
 }));
@@ -38,14 +39,40 @@ const validationSchema = Yup.object({
  * For Logging user in
  */
 
-const SigninForm = () => {
+const SigninForm = ({ setShowNotification, btnState, setBtnState }) => {
   const classes = useStyles();
-  const [loading, setLoading] = useState(false); // set SignIn Button Loading or not
+  const router = useRouter();
+  const URL_ON_SUCCESS = '/user/profile';
 
-  const handleSignIn = useCallback(async (values) => {
-    const { email, password } = values;
-    const result = await campusShareAPI.post('/api/auth/signin', { email, password })
-  }, [campusShareAPI])
+  // Sign in function
+  const handleSignIn = useCallback(
+    async (values) => {
+      const { email, password } = values;
+
+      setBtnState({ isLoading: true, ...btnState });
+      await campusShareAPI
+        .post("/api/auth/signin", { email, password })
+        .then(() => {
+          router.push(URL_ON_SUCCESS);
+        })
+        .catch((err) => {
+          if (err.response) {
+            setBtnState({
+              isLoading: false,
+              message: err.response.data.message,
+              type: "error",
+            });
+          } else {
+            setBtnState({
+              isLoading: false,
+              message: err.message,
+              type: "error",
+            });
+          }
+        });
+    },
+    [campusShareAPI]
+  );
 
   return (
     <Formik
@@ -94,11 +121,12 @@ const SigninForm = () => {
               type="submit"
               onClick={handleSubmit}
               style={{ marginRight: ".8rem" }}
-              loading={loading.toString()}
+              disabled={btnState.isLoading}
             >
-              {loading ? "Loading..." : "Sign In" }
+              {btnState.isLoading ? "Please Wait..." : "Sign In"}
             </Button>
-            <Button variant="contained" color="primary" onClick={resetForm}>
+            <Button 
+              variant="contained" color="primary" onClick={resetForm}>
               Reset Form
             </Button>
           </div>
