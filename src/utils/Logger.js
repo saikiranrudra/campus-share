@@ -12,7 +12,7 @@ class Logger {
    * @param {Error} error 
    */
   error(error) {
-    console.log(`=================${error.message}==================`)
+    console.log(`👉Message: ${error.message}`)
     console.error(error);
   }
 }

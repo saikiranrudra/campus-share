@@ -30,7 +30,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-// Alert error Component
+// Alert Notification Component
 function Alert(props) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
 }
