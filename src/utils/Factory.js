@@ -2,6 +2,20 @@
  * A Reusable Crud Operations
  */
 
+import Logger from "./Logger";
+
+/**
+ * Removed all Not allowed properties from the object
+ * @param {Object} object - object with key value pairs 
+ * @param {String[]} filterKeys - array of strings contains property names to allowed
+ * @returns Object with only allowed properties
+ */
+export const filterObject = (object = {}, filterKeys = []) => {
+  let filteredObject = {};
+  filterKeys.forEach(key => object[key] ? filteredObject[key] = object[key] : null)
+  return filteredObject;
+}
+
 /**
  * response All the data in the model which satisfy condition
  * @example
@@ -11,20 +25,21 @@
  * @param {number} condition.pageNo - 0 based
  * @returns {Array} - All the data of models which satisfy condition
  */
-const getByCondition = async (MODEL, { pageNo = 0, ...query }) => {
+export const getByCondition = async (MODEL, { pageNo = 0, ...query }, filterKeys = []) => {
+  const filteredQuery = filterObject(query, filterKeys);
   try {
     const LIMIT = 10;
-    const data = await MODEL.find(query)
+    const data = await MODEL.find(filteredQuery)
       .limit(LIMIT)
       .skip(pageNo * LIMIT)
       .exec();
 
     return {
       data,
-      count: data.length,
       pageNo: pageNo,
     };
   } catch (err) {
+    Logger.error(err);
     throw err;
   }
 };
@@ -37,7 +52,7 @@ const getByCondition = async (MODEL, { pageNo = 0, ...query }) => {
  * @param {Object} createData - data of which object is to be created in the collection
  * @returns {Object} - Object created in the collextion
  */
-const create = async (MODEL, createData) => {
+export const create = async (MODEL, createData) => {
   try {
     const data = await MODEL.create(createData);
     return data;
@@ -77,9 +92,9 @@ const findByIdAndUpdate = async (MODEL, _id, newData) => {
  * const isUserDeleted: boolean = await findByIdAndDelete(User, "dasd5+6dsada565d4asd6a")
  * @param {*} MODEL - Mongoose model Object
  * @param {String} id  - Id which unique to the document
- * @returns {Boolean} - True if object is successfully deleted
+ * @returns {Boolean} - returns nothing throws error if something went work
  */
-const findByIdAndDelete = async (MODEL, id) => {
+export const findByIdAndDelete = async (MODEL, id) => {
   try {
     await MODEL.findByIdAndDelete(id);
   } catch (err) {
@@ -87,9 +102,27 @@ const findByIdAndDelete = async (MODEL, id) => {
   }
 };
 
+/**
+ * Find Object by Id
+ * @example
+ * const user = await findById(User, "dsd54a4sd654asd5a4d")
+ * @param {*} Model - Mongoose Model Object
+ * @param {*} id 
+ * @returns {Object} - User Object
+ */
+const findById = async (Model, id) => {
+  try {
+    const document = await Model.findById(id);
+    return document;
+  } catch(err) {
+    throw err;
+  }
+}
+
 module.exports = {
-  getByCondition,
-  findByIdAndUpdate,
+  findById,
   findByIdAndDelete,
+  findByIdAndUpdate,
   create,
-};
+  getByCondition
+}

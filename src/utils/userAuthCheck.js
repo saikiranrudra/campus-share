@@ -1,7 +1,7 @@
 import cookies from "next-cookies";
 import jwt from "jsonwebtoken";
 import axios from "axios";
-
+import Logger from "./Logger";
 
 /**
  * Check weather user is authenticated or not
@@ -33,11 +33,12 @@ export const userAuthCheck = async (ctx) => {
 
       return {
         props: {
-          user: res.data.data,
+          user: res.data.data[0],
         },
       };
     } catch (err) {
       //Not  authenticated
+      Logger.error(err);
       ctx.res?.writeHead(302, {
         Location: `${process.env.BASE_URL}/auth/signin`,
       });
@@ -45,6 +46,7 @@ export const userAuthCheck = async (ctx) => {
     }
   } else {
     //Not authenticated
+    Logger.error(err);
     ctx.res?.writeHead(302, {
       Location: `${process.env.BASE_URL}/auth/signin`,
     });

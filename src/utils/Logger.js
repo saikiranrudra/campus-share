@@ -13,7 +13,11 @@ class Logger {
    */
   error(error) {
     console.log(`👉Message: ${error.message}`)
-    console.error(error);
+    if(error.response) {
+      console.log(error.response.data.message);
+    } else {
+      console.error(error);
+    }
   }
 }
 
