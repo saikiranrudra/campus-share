@@ -15,11 +15,11 @@ const useStyles = makeStyles({
  * @param { children } props
  */
 
-const UserLayout = ({ children }) => {
+const UserLayout = ({ children, route }) => {
   const classes = useStyles();
   return (
     <div className={classes.container}>
-      <SideNav />
+      <SideNav route={route}  />
       <div>{children}</div>
     </div>
   );

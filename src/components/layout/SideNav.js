@@ -1,11 +1,14 @@
+import { useRouter } from 'next/router'
 import { Paper, makeStyles, IconButton } from "@material-ui/core";
 import Logo from "../utils/Logo";
+import campusShareAPI from "./../../utils/Apis/campusShareAPI"
 
 //Icons
 import {
   Home as HomeIcon,
   AccountBox as AccountIcon,
-  Settings as SettingsIcon
+  Settings as SettingsIcon,
+  ExitToApp as SignOutIcon
 } from "@material-ui/icons";
 
 const useStyles = makeStyles((theme) => ({
@@ -16,7 +19,7 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: theme.palette.primary.main,
     margin: "1rem 0",
     padding: "1.5rem 0",
-    height: "95vh",
+    height: "90vh",
     position: "sticky",
   },
 
@@ -28,21 +31,31 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const SideNav = () => {
+const SideNav = ({ route }) => {
   const classes = useStyles();
+  const router = useRouter();
+  const handleSignout = () => {
+    campusShareAPI.post('/api/auth/signout').then(() => {
+      router.push('/auth/signin');
+    })
+  }
+
   return (
     <Paper className={classes.container}>
       <Logo withName={false} />
 
       <div className={classes.icons}>
-        <IconButton>
+        <IconButton color={route === "/home" ? "secondary" : "default"} >
           <HomeIcon />
         </IconButton>
-        <IconButton>
+        <IconButton color={route === "/profile" ? "secondary" : "default"}>
           <AccountIcon />
         </IconButton>
-        <IconButton>
+        <IconButton color={route === "/setting" ? "secondary" : "default"}>
           <SettingsIcon />
+        </IconButton>
+        <IconButton color={route === "/signout" ? "secondary" : "default"} onClick={handleSignout}>
+          <SignOutIcon />
         </IconButton>
       </div>
     </Paper>

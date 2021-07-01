@@ -2,11 +2,12 @@ import Image from "next/image";
 import Head from "next/head";
 import Link from "next/link";
 import Nav from "./../layout/Nav";
-import { Button, Typography } from "@material-ui/core";
+import { Button, Typography, Snackbar } from "@material-ui/core";
 import SignupForm from "./SignupForm";
 import { makeStyles } from "@material-ui/core/styles";
 import SigninForm from "./SignInForm";
 import PropTypes from "prop-types";
+import MuiAlert from '@material-ui/lab/Alert';
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -42,8 +43,17 @@ const useStyles = makeStyles((theme) => ({
  * <AuthForm type="SIGN_IN" header="🔐 Login Form" />
  */
 
+function Alert(props) {
+  return <MuiAlert elevation={6} variant="filled" {...props} />;
+}
+
 const AuthForm = ({ header, type }) => {
   const classes = useStyles();
+  const [btnState, setBtnState] = useState({
+    isLoading: false,
+    message: "",
+    type: "success"
+  })
   return (
     <>
       <Head>
