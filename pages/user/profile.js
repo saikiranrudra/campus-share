@@ -10,7 +10,8 @@ import {
   Table,
   TableBody,
   TableRow,
-  TableCell
+  TableCell,
+  Button
 } from "@material-ui/core";
 import { userAuthCheck } from "./../../src/utils/userAuthCheck";
 import Logger from "../../src/utils/Logger";
@@ -55,13 +56,17 @@ const useStyle = makeStyles((theme) => ({
     borderRadius: "5px",
     fontSize: ".8rem",
     textTransform: "uppercase",
-    fontWeight: "bolder"
+    fontWeight: "bolder",
   },
   profileTable: {
     "& > tbody > tr > td": {
-      color: "#000"
-    }
-  }
+      color: "#000",
+    },
+  },
+  key: {
+    fontWeight: "bold",
+    textTransform: "uppercase",
+  },
 }));
 
 const Profile = ({ user }) => {
@@ -99,23 +104,31 @@ const Profile = ({ user }) => {
             <Table className={classes.profileTable}>
               <TableBody>
                 <TableRow>
-                  <TableCell>College Name</TableCell>
+                  <TableCell className={classes.key}>College Name</TableCell>
                   <TableCell>{user?.college?.name}</TableCell>
                 </TableRow>
                 <TableRow>
-                  <TableCell>Adhaar Id</TableCell>
+                  <TableCell className={classes.key}>Adhaar Id</TableCell>
                   <TableCell>{user?.adhaarNumber}</TableCell>
                 </TableRow>
                 <TableRow>
-                  <TableCell>College Enrollment Number</TableCell>
+                  <TableCell className={classes.key}>
+                    College Enrollment Number
+                  </TableCell>
                   <TableCell>{user?.collegeEnrollmentNumber}</TableCell>
                 </TableRow>
                 <TableRow>
-                  <TableCell>upi</TableCell>
+                  <TableCell className={classes.key}>upi</TableCell>
                   <TableCell>{user?.upi}</TableCell>
                 </TableRow>
               </TableBody>
             </Table>
+            <br />
+            {!user?.active && (
+              <Button variant="contained" color="primary">
+                Request Account verification
+              </Button>
+            )}
           </Paper>
         </div>
       </UserLayout>

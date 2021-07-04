@@ -130,7 +130,6 @@ const SigninForm = ({ setShowNotification, btnState, setBtnState }) => {
               style={{ marginRight: ".8rem" }}
               disabled={btnState.isLoading}
             >
-              {console.log(btnState.isLoading)}
               {btnState.isLoading ? "Please Wait..." : "Sign In"}
             </Button>
             <Button 
