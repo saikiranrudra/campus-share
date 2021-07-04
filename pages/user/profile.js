@@ -126,7 +126,7 @@ const Profile = ({ user }) => {
             <br />
             {!user?.active && (
               <Button variant="contained" color="primary">
-                Request Account verification
+                Request Account Activation
               </Button>
             )}
           </Paper>
