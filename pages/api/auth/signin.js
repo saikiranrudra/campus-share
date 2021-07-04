@@ -17,7 +17,7 @@ const signin = nc({ onError, onNoMatch })
     ).exec();
 
     if (!user) {
-      res.status(401).json({ message: "user not found" });
+      res.status(401).json({ message: "Invalid Email or Password" });
       res.end();
       return;
     }

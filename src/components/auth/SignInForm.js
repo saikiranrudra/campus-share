@@ -49,16 +49,22 @@ const SigninForm = ({ setShowNotification, btnState, setBtnState }) => {
     async (values) => {
       const { email, password } = values;
 
-      setBtnState({ isLoading: true, ...btnState });
+      setBtnState({ ...btnState, isLoading: true});
       await campusShareAPI
         .post("/api/auth/signin", { email, password })
         .then(() => {
+          setBtnState({
+            isLoading: false,
+            message: "Authenticated. readirecting please wait",
+            type: "success"
+          });
+          setShowNotification(true);
           router.push(URL_ON_SUCCESS);
         })
         .catch((err) => {
           if (err.response) {
             setBtnState({
-              isLoading: false,
+              // isLoading: false,
               message: err.response.data.message,
               type: "error",
             });
@@ -69,6 +75,7 @@ const SigninForm = ({ setShowNotification, btnState, setBtnState }) => {
               type: "error",
             });
           }
+          setShowNotification(true);
         });
     },
     [campusShareAPI]
@@ -123,6 +130,7 @@ const SigninForm = ({ setShowNotification, btnState, setBtnState }) => {
               style={{ marginRight: ".8rem" }}
               disabled={btnState.isLoading}
             >
+              {console.log(btnState.isLoading)}
               {btnState.isLoading ? "Please Wait..." : "Sign In"}
             </Button>
             <Button 

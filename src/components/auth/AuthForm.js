@@ -57,7 +57,7 @@ const AuthForm = ({ header, type }) => {
   });
   const [showNotification, setShowNotification] = useState(false);
 
-  const handleCloseNotification = () => {
+  const handleCloseNotification = (event, reason) => {
     if (reason === "clickaway") {
       return;
     }

@@ -6,5 +6,6 @@ export default [
   "collegeEnrollmentNumber",
   "adhaarNumber",
   "active",
-  "_id"
+  "_id",
+  "populate"
 ]

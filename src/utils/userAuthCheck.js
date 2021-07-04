@@ -33,7 +33,7 @@ export const userAuthCheck = async (ctx) => {
 
       return {
         props: {
-          user: res.data.data[0],
+          user: res.data.data[0] || {}
         },
       };
     } catch (err) {
@@ -46,7 +46,7 @@ export const userAuthCheck = async (ctx) => {
     }
   } else {
     //Not authenticated
-    Logger.error(err);
+    Logger.error("Un Authorized access: token undefined");
     ctx.res?.writeHead(302, {
       Location: `${process.env.BASE_URL}/auth/signin`,
     });

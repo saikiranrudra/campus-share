@@ -49,7 +49,7 @@ const SignupForm = ({ setShowNotification, btnState, setBtnState }) => {
   };
 
   const handleFormSubmit = (values) => {
-    setBtnState({ isLoading: true, ...btnState });
+    setBtnState({ ...btnState, isLoading: true });
     axios
       .post("/api/user", values)
       .then(() => {
@@ -126,6 +126,7 @@ const SignupForm = ({ setShowNotification, btnState, setBtnState }) => {
               name="password"
               onChange={handleChange}
               onBlur={handleBlur}
+              style={{ whiteSpace: "pre-line" }}
               value={values.password}
               error={!!(errors.password && touched.password)}
               helperText={
@@ -182,6 +183,29 @@ const SignupForm = ({ setShowNotification, btnState, setBtnState }) => {
                   touched.collegeEnrollmentNumber
                 )
                   ? errors.collegeEnrollmentNumber
+                  : ""
+              }
+            />
+            <TextField
+              label="Enter UPI Id"
+              variant="outlined"
+              type="text"
+              name="upi"
+              onChange={handleChange}
+              onBlur={handleBlur}
+              value={values.upi}
+              error={
+                !!(
+                  errors.upi &&
+                  touched.upi
+                )
+              }
+              helperText={
+                !!(
+                  errors.upi &&
+                  touched.upi
+                )
+                  ? errors.upi
                   : ""
               }
             />

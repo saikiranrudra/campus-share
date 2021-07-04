@@ -13,6 +13,7 @@ import {
   TableCell
 } from "@material-ui/core";
 import { userAuthCheck } from "./../../src/utils/userAuthCheck";
+import Logger from "../../src/utils/Logger";
 
 const useStyle = makeStyles((theme) => ({
   container: {
@@ -56,11 +57,16 @@ const useStyle = makeStyles((theme) => ({
     textTransform: "uppercase",
     fontWeight: "bolder"
   },
+  profileTable: {
+    "& > tbody > tr > td": {
+      color: "#000"
+    }
+  }
 }));
 
 const Profile = ({ user }) => {
   const classes = useStyle();
-  console.log(user);
+  Logger.log(user);
   return (
     <>
       <Head>
@@ -71,7 +77,7 @@ const Profile = ({ user }) => {
           <Paper className={classes.profileContainer}>
             <div className={classes.profileImageContainer}>
               <Image
-                src={user.avatar}
+                src={user?.avatar || "/avatar"}
                 height="100"
                 width="100"
                 className={classes.profileImage}
@@ -79,26 +85,34 @@ const Profile = ({ user }) => {
             </div>
             <div className={classes.headContent}>
               <Typography varaint="h3" align="center">
-                {user.fullName}
+                {user?.fullName}
               </Typography>
               <Typography varaint="body1" align="center">
-                {user.email}
+                {user?.email}
               </Typography>
             </div>
 
             <ButtonBase className={classes.isActive}>
-              {user.active ? "Activated" : "Not Activated"}
+              {user?.active ? "Activated" : "Not Activated"}
             </ButtonBase>
 
-            <Table>
+            <Table className={classes.profileTable}>
               <TableBody>
                 <TableRow>
                   <TableCell>College Name</TableCell>
-                  <TableCell>{user.college}</TableCell>
+                  <TableCell>{user?.college?.name}</TableCell>
                 </TableRow>
                 <TableRow>
-                  <TableCell>College Name</TableCell>
-                  <TableCell>{user.college}</TableCell>
+                  <TableCell>Adhaar Id</TableCell>
+                  <TableCell>{user?.adhaarNumber}</TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableCell>College Enrollment Number</TableCell>
+                  <TableCell>{user?.collegeEnrollmentNumber}</TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableCell>upi</TableCell>
+                  <TableCell>{user?.upi}</TableCell>
                 </TableRow>
               </TableBody>
             </Table>

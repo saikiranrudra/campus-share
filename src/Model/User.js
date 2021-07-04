@@ -36,6 +36,16 @@ const userSchema = new mongoose.Schema({
     required: [true, "College name is required"],
     ref: 'College'
   },
+  upi: {
+    type: String,
+    validate: {
+      validator: function(v) {
+        return /\w+(@)\w+/.test(v)
+      },
+      message: props => `${props.value} is invalid upi id`
+    },
+    required: [true, "UPI id is required for transection"]
+  },
   collegeId: String,
   adhaarId: String,
   adhaarNumber: {

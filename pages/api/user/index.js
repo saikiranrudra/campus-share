@@ -14,7 +14,9 @@ const user = nc({ onError, onNoMatch })
   )
   .use(userProtect)
   .get(async (req, res) => {
-    res.status(200).json(await Factory.getByCondition(User, req.body, userFilterKeys))
+    const filter = { ...req.body };
+    filter.populate = 'college'
+    res.status(200).json(await Factory.getByCondition(User, filter, userFilterKeys))
   })
   .put(async (req, res) =>
   res

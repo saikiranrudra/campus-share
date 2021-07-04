@@ -15,7 +15,7 @@ export default Yup.object({
   password: Yup.string()
     .matches(
       /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/,
-      "Must Contain 8 Characters, One Uppercase, One Lowercase, One Number and one special case Character"
+      "Must Contain 8 Characters\n One Uppercase\n One Lowercase\n One Number and one special case Character"
     )
     .required("Password is required to create account"),
   confirmPassword: Yup.string()
@@ -27,6 +27,7 @@ export default Yup.object({
   collegeEnrollmentNumber: Yup.string().required(
     "College Enrollment Number is required"
   ),
+  upi: Yup.string().required("UPI Id is required").matches(/\w+(@)\w+/, "Invalid UPI type"),
 });
 
 export const initialValues = {
@@ -37,4 +38,5 @@ export const initialValues = {
   confirmPassword: "",
   adhaarNumber: "",
   collegeEnrollmentNumber: "",
+  upi: ""
 };

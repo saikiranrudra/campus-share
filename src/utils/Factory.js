@@ -27,9 +27,16 @@ export const filterObject = (object = {}, filterKeys = []) => {
  */
 export const getByCondition = async (MODEL, { pageNo = 0, ...query }, filterKeys = []) => {
   const filteredQuery = filterObject(query, filterKeys);
+  let populate;
+
+  if(filteredQuery.populate) {
+    populate = filteredQuery.populate;
+    delete filteredQuery.populate 
+  }
   try {
     const LIMIT = 10;
     const data = await MODEL.find(filteredQuery)
+      .populate(populate)
       .limit(LIMIT)
       .skip(pageNo * LIMIT)
       .exec();
