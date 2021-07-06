@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 import validator from "validator";
 import { compare, hash } from "bcrypt";
+import College from "./College"; // to fix College not registered Issue
 
 /**
  * User Collection Schema

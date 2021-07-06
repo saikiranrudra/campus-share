@@ -1,3 +1,4 @@
+import { useState } from "react";
 import Image from "next/image";
 import Head from "next/head";
 import UserLayout from "../../src/components/layout/UserLayout";
@@ -11,10 +12,12 @@ import {
   TableBody,
   TableRow,
   TableCell,
-  Button
+  Button,
+  Modal,
 } from "@material-ui/core";
 import { userAuthCheck } from "./../../src/utils/userAuthCheck";
-import Logger from "../../src/utils/Logger";
+// import Logger from "../../src/utils/Logger";
+import ActivationForm from "../../src/components/user/ActivationForm";
 
 const useStyle = makeStyles((theme) => ({
   container: {
@@ -71,7 +74,7 @@ const useStyle = makeStyles((theme) => ({
 
 const Profile = ({ user }) => {
   const classes = useStyle();
-  Logger.log(user);
+  const [openActivationForm, setOpenActivationForm] = useState(false);
   return (
     <>
       <Head>
@@ -125,12 +128,28 @@ const Profile = ({ user }) => {
             </Table>
             <br />
             {!user?.active && (
-              <Button variant="contained" color="primary">
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={() => {
+                  setOpenActivationForm(true);
+                }}
+              >
                 Request Account Activation
               </Button>
             )}
+            <br />
+            <Button color="primary">Change Password</Button>
           </Paper>
         </div>
+        <Modal
+          open={openActivationForm}
+          onClose={() => {
+            setOpenActivationForm(false);
+          }}
+        >
+          <ActivationForm />
+        </Modal>
       </UserLayout>
     </>
   );
