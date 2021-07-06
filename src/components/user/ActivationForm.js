@@ -4,10 +4,10 @@ import { useDropzone } from "react-dropzone";
 
 const useStyles = makeStyles((theme) => ({
   container: {
-    position: "absolute",
-    left: "50%",
-    top: "50%",
-    transform: "translate(calc(-50% + 38px), -50%)",
+    // position: "absolute",
+    // left: "50%",
+    // top: "50%",
+    // transform: "translate(calc(-50% + 38px), -50%)",
     padding: "1rem 1.2rem",
   },
   heading: {

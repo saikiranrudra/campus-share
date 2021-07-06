@@ -13,7 +13,7 @@ import {
   TableRow,
   TableCell,
   Button,
-  Modal,
+  Dialog,
 } from "@material-ui/core";
 import { userAuthCheck } from "./../../src/utils/userAuthCheck";
 // import Logger from "../../src/utils/Logger";
@@ -142,14 +142,14 @@ const Profile = ({ user }) => {
             <Button color="primary">Change Password</Button>
           </Paper>
         </div>
-        <Modal
+        <Dialog
           open={openActivationForm}
           onClose={() => {
             setOpenActivationForm(false);
           }}
         >
           <ActivationForm />
-        </Modal>
+        </Dialog>
       </UserLayout>
     </>
   );
