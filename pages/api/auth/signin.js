@@ -24,7 +24,9 @@ const signin = nc({ onError, onNoMatch })
 
     const { email, password, role } = user;
 
-    const result = user.verifyPassword(candidatePassword, password);
+    const result = await user.verifyPassword(candidatePassword, password);
+
+    console.log("Result: ", result);
 
     if (result) {
       // User is authenticated
