@@ -1,14 +1,15 @@
-import { useRouter } from 'next/router'
+import { useRouter } from "next/router";
+import Link from "next/link";
 import { Paper, makeStyles, IconButton } from "@material-ui/core";
 import Logo from "../utils/Logo";
-import campusShareAPI from "./../../utils/Apis/campusShareAPI"
+import campusShareAPI from "./../../utils/Apis/campusShareAPI";
 
 //Icons
 import {
   Home as HomeIcon,
   AccountBox as AccountIcon,
   Settings as SettingsIcon,
-  ExitToApp as SignOutIcon
+  ExitToApp as SignOutIcon,
 } from "@material-ui/icons";
 
 const useStyles = makeStyles((theme) => ({
@@ -27,7 +28,7 @@ const useStyles = makeStyles((theme) => ({
     marginTop: "2.1rem",
     display: "flex",
     flexDirection: "column",
-    justifyContent: "center"
+    justifyContent: "center",
   },
 }));
 
@@ -35,27 +36,45 @@ const SideNav = ({ route }) => {
   const classes = useStyles();
   const router = useRouter();
   const handleSignout = () => {
-    campusShareAPI.post('/api/auth/signout').then(() => {
-      router.push('/auth/signin');
-    })
-  }
+    campusShareAPI.post("/api/auth/signout").then(() => {
+      router.push("/auth/signin");
+    });
+  };
 
   return (
     <Paper className={classes.container}>
-      <Logo withName={false} />
+      <Link href="/user/profile">
+        <Logo withName={false} />
+      </Link>
 
       <div className={classes.icons}>
-        <IconButton color={route === "/home" ? "secondary" : "default"} >
-          <HomeIcon />
+        <IconButton>
+          <HomeIcon
+            style={{
+              fill: route === "/home" ? "#000" : "default",
+            }}
+          />
         </IconButton>
-        <IconButton color={route === "/profile" ? "secondary" : "default"}>
-          <AccountIcon />
+        <IconButton>
+          <AccountIcon
+            style={{
+              fill: route === "/profile" ? "#000" : "default",
+            }}
+          />
         </IconButton>
-        <IconButton color={route === "/setting" ? "secondary" : "default"}>
-          <SettingsIcon />
+        <IconButton>
+          <SettingsIcon
+            style={{
+              fill: route === "/settings" ? "#000" : "default",
+            }}
+          />
         </IconButton>
-        <IconButton color={route === "/signout" ? "secondary" : "default"} onClick={handleSignout}>
-          <SignOutIcon />
+        <IconButton onClick={handleSignout}>
+          <SignOutIcon
+            style={{
+              fill: route === "/signout" ? "#000" : "default",
+            }}
+          />
         </IconButton>
       </div>
     </Paper>
