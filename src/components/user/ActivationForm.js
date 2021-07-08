@@ -1,15 +1,16 @@
-import { useCallback, useState } from "react";
+import { useState, useEffect } from "react";
 import { Paper, makeStyles, Typography, Button } from "@material-ui/core";
-import { useDropzone } from "react-dropzone";
+
 import Response from "./../utils/Response";
 import campusShareAPI from "../../utils/Apis/campusShareAPI";
+import FileDropZone from "../utils/FileDropZone";
 
 const useStyles = makeStyles((theme) => ({
   container: {
     padding: "1rem 1.2rem",
   },
   heading: {
-    color: "#000",
+    fontWeight: "bold"
   },
   subHeading: {
     color: theme.palette.grey.A200,
@@ -39,7 +40,12 @@ const useStyles = makeStyles((theme) => ({
 
 const ActivationForm = () => {
   const classes = useStyles();
-  const [acceptedFiles, setAcceptedFiles] = useState([]);
+  const [adhaarCard, setAdhaarCard] = useState(null);
+  const [collegeIdCard, setCollegeIdCard] = useState(null);
+  const [
+    userPhotoWithCollegeAndAdhaarCard,
+    setUserPhotoWithCollegeAndAdhaarCard,
+  ] = useState(null);
   const [notification, setNotification] = useState({
     type: "success",
     message: "",
@@ -47,16 +53,9 @@ const ActivationForm = () => {
   });
   const [open, setOpen] = useState(false);
 
-  const onDrop = useCallback((acceptedFiles) => {
-    setAcceptedFiles(acceptedFiles);
-  }, []);
-
-  const { getRootProps, getInputProps, isDragActive } = useDropzone({
-    onDrop,
-    maxFiles: 3,
-    accept: "image/png",
-    maxSize: 16000000,
-  });
+  useEffect(() => {
+    console.log(adhaarCard);
+  }, [adhaarCard]);
 
   const handleRequestSubmition = () => {
     setNotification({
@@ -64,39 +63,45 @@ const ActivationForm = () => {
       isLoading: true,
     });
 
-    if(acceptedFiles.length !== 3) {
+    if (!adhaarCard && !collegeIdCard && !userPhotoWithCollegeAndAdhaarCard) {
       setNotification({
         type: "error",
         message: "3 documents are required",
         isLoading: false,
-      })
+      });
       setOpen(true);
       return;
     }
 
     let formData = new FormData();
 
-    acceptedFiles.forEach((file, index) => {
-      formData.append(index + "", file);
-    })
+    formData.append("Image1", adhaarCard);
+    formData.append("Image2", collegeIdCard);
+    formData.append("Image3", userPhotoWithCollegeAndAdhaarCard);
 
-    campusShareAPI.post("/api/user/activationRequest", formData)
-      .then(res => {
+    console.log(formData);
+
+    campusShareAPI
+      .post("/api/user/activationRequest", formData)
+      .then((res) => {
         setNotification({
           type: "success",
           message: "Request Placed Successfully",
-          isLoading: false
-        })
-      }).catch((err) => {
+          isLoading: false,
+        });
+      })
+      .catch((err) => {
         setNotification({
           type: "error",
-          message: err?.response?.message ? err?.response?.message : err.message,
-          isLoading: false  
-        })
-      }).finally(() => {
-        setOpen(true);
+          message: err?.response?.message
+            ? err?.response?.message
+            : err.message,
+          isLoading: false,
+        });
       })
-    
+      .finally(() => {
+        setOpen(true);
+      });
   };
 
   return (
@@ -108,38 +113,26 @@ const ActivationForm = () => {
         <Typography varaint="caption" className={classes.subHeading}>
           Please upload the files to request account activation
         </Typography>
-        <div
-          className={`${classes.textColor} ${classes.dropContainer}`}
-          {...getRootProps()}
-        >
-          <input {...getInputProps()} />
-          {isDragActive ? (
-            <p className={classes.textColor}>Drop file here</p>
-          ) : (
-            <>
-              <p className={classes.textColor}>
-                Drag 'n' drop files here, or click to select files below files
-                required
-              </p>
-              <ul className={classes.textColor}>
-                <li>Adhaar Card</li>
-                <li>College Id Card</li>
-                <li>Your Photo holding both</li>
-              </ul>
-            </>
-          )}
-        </div>
 
+        <FileDropZone setAcceptedFile={setAdhaarCard} acceptedFile={adhaarCard}>
+          <span>Drop or click to upload your Adhaar Card</span>
+        </FileDropZone>
+        <FileDropZone
+          setAcceptedFile={setCollegeIdCard}
+          acceptedFile={collegeIdCard}
+        >
+          <span>Drop or click to upload your College Id Card</span>
+        </FileDropZone>
+        <FileDropZone
+          setAcceptedFile={setUserPhotoWithCollegeAndAdhaarCard}
+          acceptedFile={userPhotoWithCollegeAndAdhaarCard}
+        >
+          <span>
+            Drop or click to upload your Your Photo holding Adhaar Card and
+            College Id
+          </span>
+        </FileDropZone>
         <br />
-        <Typography variant="h6" className={classes.heading}>
-          Selected Files
-        </Typography>
-        <ul className={classes.acceptedList}>
-          {acceptedFiles.length === 0 && <li>No Files selected</li>}
-          {acceptedFiles.map((file) => (
-            <li key={file.name}>{file.name}</li>
-          ))}
-        </ul>
 
         <Button
           variant="contained"
@@ -147,6 +140,7 @@ const ActivationForm = () => {
           style={{ width: "100%" }}
           onClick={handleRequestSubmition}
           disabled={notification.isLoading}
+          style={{ zIndex: "1" }}
         >
           {notification.isLoading
             ? "Please wait..."

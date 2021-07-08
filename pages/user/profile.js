@@ -38,7 +38,6 @@ const useStyle = makeStyles((theme) => ({
     boxShadow: theme.shadows[1],
   },
   headContent: {
-    color: "#000",
     "& > p:first-child": {
       fontWeight: "bolder",
     },
@@ -60,11 +59,6 @@ const useStyle = makeStyles((theme) => ({
     fontSize: ".8rem",
     textTransform: "uppercase",
     fontWeight: "bolder",
-  },
-  profileTable: {
-    "& > tbody > tr > td": {
-      color: "#000",
-    },
   },
   key: {
     fontWeight: "bold",
@@ -104,7 +98,7 @@ const Profile = ({ user }) => {
               {user?.active ? "Activated" : "Not Activated"}
             </ButtonBase>
 
-            <Table className={classes.profileTable}>
+            <Table>
               <TableBody>
                 <TableRow>
                   <TableCell className={classes.key}>College Name</TableCell>
