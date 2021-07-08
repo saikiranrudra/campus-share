@@ -63,7 +63,7 @@ const ActivationForm = () => {
       isLoading: true,
     });
 
-    if (!adhaarCard && !collegeIdCard && !userPhotoWithCollegeAndAdhaarCard) {
+    if (!adhaarCard || !collegeIdCard || !userPhotoWithCollegeAndAdhaarCard) {
       setNotification({
         type: "error",
         message: "3 documents are required",
