@@ -39,7 +39,11 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const ActivationForm = ({ email }) => {
+const ActivationForm = ({
+  email,
+  setShowActivationRequest,
+  showActivationRequest,
+}) => {
   const classes = useStyles();
   const [adhaarCard, setAdhaarCard] = useState(null);
   const [collegeIdCard, setCollegeIdCard] = useState(null);
@@ -107,6 +111,7 @@ const ActivationForm = ({ email }) => {
             message: "Request Placed Successfully",
             isLoading: false,
           });
+          setShowActivationRequest(false);
         })
         .catch((err) => {
           setNotification({
@@ -168,19 +173,20 @@ const ActivationForm = ({ email }) => {
           </span>
         </FileDropZone>
         <br />
-
-        <Button
-          variant="contained"
-          color="primary"
-          style={{ width: "100%" }}
-          onClick={handleRequestSubmition}
-          disabled={notification.isLoading}
-          style={{ zIndex: "1" }}
-        >
-          {notification.isLoading
-            ? "Please wait..."
-            : "Send Activation Request"}
-        </Button>
+        {showActivationRequest && (
+          <Button
+            variant="contained"
+            color="primary"
+            style={{ width: "100%" }}
+            onClick={handleRequestSubmition}
+            disabled={notification.isLoading}
+            style={{ zIndex: "1" }}
+          >
+            {notification.isLoading
+              ? "Please wait..."
+              : "Send Activation Request"}
+          </Button>
+        )}
       </Paper>
       <Response open={open} setOpen={setOpen} response={notification} />
     </>

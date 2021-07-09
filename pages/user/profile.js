@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import Head from "next/head";
 import UserLayout from "../../src/components/layout/UserLayout";
@@ -16,7 +16,9 @@ import {
   Dialog,
 } from "@material-ui/core";
 import { userAuthCheck } from "./../../src/utils/userAuthCheck";
-import ActivationForm from "../../src/components/user/ActivationForm";
+import campusShareAPI from "../../src/utils/Apis/campusShareAPI";
+import Logger from "../../src/utils/Logger";
+import ActivationForm from "./../../src/components/user/ActivationForm";
 
 const useStyle = makeStyles((theme) => ({
   container: {
@@ -68,6 +70,29 @@ const useStyle = makeStyles((theme) => ({
 const Profile = ({ user }) => {
   const classes = useStyle();
   const [openActivationForm, setOpenActivationForm] = useState(false);
+  const [showActivationRequest, setShowActivationRequest] = useState(false);
+
+  useEffect(() => {
+    campusShareAPI
+      .get("/api/user/activationRequest", {
+        params: {
+          _id: user?._id,
+        },
+      })
+      .then((res) => {
+        setShowActivationRequest(!res.data.isRequestPlaced);
+      })
+      .catch((err) => {
+        setShowActivationRequest(false);
+        Logger.error(err);
+      });
+  }, []);
+
+  //testing
+  useEffect(() => {
+    console.log(showActivationRequest);
+  }, [showActivationRequest]);
+
   return (
     <>
       <Head>
@@ -120,7 +145,7 @@ const Profile = ({ user }) => {
               </TableBody>
             </Table>
             <br />
-            {!user?.active && (
+            {!user?.active && showActivationRequest && (
               <Button
                 variant="contained"
                 color="primary"
@@ -135,14 +160,18 @@ const Profile = ({ user }) => {
             <Button color="primary">Change Password</Button>
           </Paper>
         </div>
-        {user.email && (
+        {user.email && user._id && (
           <Dialog
             open={openActivationForm}
             onClose={() => {
               setOpenActivationForm(false);
             }}
           >
-            <ActivationForm email={user.email} />
+            <ActivationForm
+              email={user.email}
+              setShowActivationRequest={setShowActivationRequest}
+              showActivationRequest={showActivationRequest}
+           />
           </Dialog>
         )}
       </UserLayout>
