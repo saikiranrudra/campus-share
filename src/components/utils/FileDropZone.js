@@ -20,18 +20,22 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const FileDropZone = ({ setAcceptedFile, children, acceptedFile }) => {
+const FileDropZone = ({ setAcceptedFile, children, acceptedFile, maxFiles = 1, maxSize=15000000 }) => {
   const classes = useStyles();
   const theme = useTheme();
   const onDrop = useCallback((acceptedFile) => {
+    if(maxFiles === 1) {
+      setAcceptedFile(acceptedFile[0]);
+      return;
+    }
     setAcceptedFile(acceptedFile);
   }, []);
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
-    maxFiles: 1,
+    maxFiles,
     accept: "image/png",
-    maxSize: 16000000,
+    maxSize,
   });
 
   return (

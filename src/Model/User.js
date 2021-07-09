@@ -64,7 +64,6 @@ const userSchema = new mongoose.Schema({
     required: [true, "College Enrollment Number is required"]
   },
   proofImage: String,
-  proofVideo: String,
   passwordChangedAt: Date,
   passwordResetToken: String,
   passwordResetExpires: Date,

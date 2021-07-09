@@ -16,7 +16,6 @@ import {
   Dialog,
 } from "@material-ui/core";
 import { userAuthCheck } from "./../../src/utils/userAuthCheck";
-// import Logger from "../../src/utils/Logger";
 import ActivationForm from "../../src/components/user/ActivationForm";
 
 const useStyle = makeStyles((theme) => ({
@@ -136,14 +135,16 @@ const Profile = ({ user }) => {
             <Button color="primary">Change Password</Button>
           </Paper>
         </div>
-        <Dialog
-          open={openActivationForm}
-          onClose={() => {
-            setOpenActivationForm(false);
-          }}
-        >
-          <ActivationForm />
-        </Dialog>
+        {user.email && (
+          <Dialog
+            open={openActivationForm}
+            onClose={() => {
+              setOpenActivationForm(false);
+            }}
+          >
+            <ActivationForm email={user.email} />
+          </Dialog>
+        )}
       </UserLayout>
     </>
   );

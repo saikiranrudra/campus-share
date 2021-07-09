@@ -26,8 +26,6 @@ const signin = nc({ onError, onNoMatch })
 
     const result = await user.verifyPassword(candidatePassword, password);
 
-    console.log("Result: ", result);
-
     if (result) {
       // User is authenticated
       const JWT_SECRET = process.env.JWT_SECRET;

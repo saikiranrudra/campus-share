@@ -4,13 +4,14 @@ import { Paper, makeStyles, Typography, Button } from "@material-ui/core";
 import Response from "./../utils/Response";
 import campusShareAPI from "../../utils/Apis/campusShareAPI";
 import FileDropZone from "../utils/FileDropZone";
+import { uploadFile } from "../utils/uploadFile";
 
 const useStyles = makeStyles((theme) => ({
   container: {
     padding: "1rem 1.2rem",
   },
   heading: {
-    fontWeight: "bold"
+    fontWeight: "bold",
   },
   subHeading: {
     color: theme.palette.grey.A200,
@@ -38,7 +39,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const ActivationForm = () => {
+const ActivationForm = ({ email }) => {
   const classes = useStyles();
   const [adhaarCard, setAdhaarCard] = useState(null);
   const [collegeIdCard, setCollegeIdCard] = useState(null);
@@ -53,11 +54,7 @@ const ActivationForm = () => {
   });
   const [open, setOpen] = useState(false);
 
-  useEffect(() => {
-    console.log(adhaarCard);
-  }, [adhaarCard]);
-
-  const handleRequestSubmition = () => {
+  const handleRequestSubmition = async () => {
     setNotification({
       ...notification,
       isLoading: true,
@@ -72,36 +69,68 @@ const ActivationForm = () => {
       setOpen(true);
       return;
     }
+    try {
+      const adhaarResult = await uploadFile(
+        adhaarCard,
+        process.env.CLOUDINARY_UPLOAD_PRESET,
+        process.env.CLOUDINARY_CLOUD_NAME
+      );
+      const collegeIdResult = await uploadFile(
+        collegeIdCard,
+        process.env.CLOUDINARY_UPLOAD_PRESET,
+        process.env.CLOUDINARY_CLOUD_NAME
+      );
+      const userPhotoWithCollegeAndAdhaarCardResult = await uploadFile(
+        userPhotoWithCollegeAndAdhaarCard,
+        process.env.CLOUDINARY_UPLOAD_PRESET,
+        process.env.CLOUDINARY_CLOUD_NAME
+      );
 
-    let formData = new FormData();
-
-    formData.append("Image1", adhaarCard);
-    formData.append("Image2", collegeIdCard);
-    formData.append("Image3", userPhotoWithCollegeAndAdhaarCard);
-
-    console.log(formData);
-
-    campusShareAPI
-      .post("/api/user/activationRequest", formData)
-      .then((res) => {
-        setNotification({
-          type: "success",
-          message: "Request Placed Successfully",
-          isLoading: false,
+      const body = {
+        adhaarCard: adhaarResult.data.secure_url,
+        collegeId: collegeIdResult.data.secure_url,
+        userPhoneWithCollegeAndAdhaarCard:
+          userPhotoWithCollegeAndAdhaarCardResult.data.secure_url,
+        email,
+      };
+      console.log(adhaarResult);
+      console.log(collegeIdResult);
+      console.log(userPhotoWithCollegeAndAdhaarCardResult);
+      console.log("Body: ", body);
+      campusShareAPI
+        .post("/api/user/activationRequest", body, {
+          withCredentials: true,
+        })
+        .then((res) => {
+          setNotification({
+            type: "success",
+            message: "Request Placed Successfully",
+            isLoading: false,
+          });
+        })
+        .catch((err) => {
+          setNotification({
+            type: "error",
+            message: err.response?.data?.message
+              ? err?.response?.data?.message
+              : err.message,
+            isLoading: false,
+          });
+        })
+        .finally(() => {
+          setOpen(true);
         });
-      })
-      .catch((err) => {
-        setNotification({
-          type: "error",
-          message: err?.response?.message
-            ? err?.response?.message
-            : err.message,
-          isLoading: false,
-        });
-      })
-      .finally(() => {
-        setOpen(true);
+    } catch (err) {
+      setNotification({
+        type: "error",
+        message: err?.response?.data?.message
+          ? err?.response?.data?.message
+          : err.message,
+        isLoading: false,
       });
+      setOpen(true);
+      return;
+    }
   };
 
   return (
@@ -114,16 +143,22 @@ const ActivationForm = () => {
           Please upload the files to request account activation
         </Typography>
 
-        <FileDropZone setAcceptedFile={setAdhaarCard} acceptedFile={adhaarCard}>
+        <FileDropZone
+          maxFiles={1}
+          setAcceptedFile={setAdhaarCard}
+          acceptedFile={adhaarCard}
+        >
           <span>Drop or click to upload your Adhaar Card</span>
         </FileDropZone>
         <FileDropZone
+          maxFiles={1}
           setAcceptedFile={setCollegeIdCard}
           acceptedFile={collegeIdCard}
         >
           <span>Drop or click to upload your College Id Card</span>
         </FileDropZone>
         <FileDropZone
+          maxFiles={1}
           setAcceptedFile={setUserPhotoWithCollegeAndAdhaarCard}
           acceptedFile={userPhotoWithCollegeAndAdhaarCard}
         >

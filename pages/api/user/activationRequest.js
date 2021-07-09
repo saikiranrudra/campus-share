@@ -1,36 +1,38 @@
-import formidable from "formidable";
-import micro from "micro";
 import userProtect from "../../../src/middlewares/userProtect";
 import nc from "next-connect";
 import onError from "../../../src/middlewares/onError";
 import onNoMatch from "../../../src/middlewares/onNoMatch";
 import dbConnectMiddleware from "../../../src/middlewares/dbConnectMiddleware";
+import User from "../../../src/Model/User";
 
 const activationRequest = nc({ onError, onNoMatch })
   .use(dbConnectMiddleware)
   .use(userProtect)
-  .post(
-    micro(async (req, res) => {
-      const data = new Promise((resolve, reject) => {
-        const form = new formidable.IncomingForm({ keepExtensions: true });
+  .post(async (req, res) => {
+    console.log("Request Body", req.body);
+    const { adhaarCard, collegeId, userPhoneWithCollegeAndAdhaarCard, email } =
+      req.body;
 
-        form.parse(req, (err, fields, files) => {
-          if (err) return reject(err);
-          resolve({ fields, files });
-        });
-      });
+    if (!adhaarCard || !collegeId || !userPhoneWithCollegeAndAdhaarCard) {
+      res.status(400).json({ message: "All three images are required" });
+      return;
+    }
 
-      const result = await data();
-      console.log(result);
+    if (!email) {
+      res.status(400).json({ message: "Unable to find user" });
+      return;
+    }
 
-      res.status(200).json({ message: "check logs" });
-    })
-  );
+    await User.findOneAndUpdate(
+      { email },
+      {
+        adhaarId: adhaarCard,
+        collegeId,
+        proofImage: userPhoneWithCollegeAndAdhaarCard,
+      }
+    );
 
-export const config = {
-  api: {
-    bodyparser: false,
-  },
-};
+    res.status(200).json({ message: "Request Placed Successfully" });
+  });
 
 export default activationRequest;

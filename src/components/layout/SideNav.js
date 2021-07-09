@@ -1,5 +1,4 @@
 import { useRouter } from "next/router";
-import Link from "next/link";
 import { Paper, makeStyles, IconButton } from "@material-ui/core";
 import Logo from "../utils/Logo";
 import campusShareAPI from "./../../utils/Apis/campusShareAPI";
@@ -43,9 +42,9 @@ const SideNav = ({ route }) => {
 
   return (
     <Paper className={classes.container}>
-      <Link href="/user/profile">
+      <a href="/user/profile">
         <Logo withName={false} />
-      </Link>
+      </a>
 
       <div className={classes.icons}>
         <IconButton>
