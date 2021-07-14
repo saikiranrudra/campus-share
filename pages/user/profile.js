@@ -1,3 +1,10 @@
+/**
+ * TODO
+ * 1. change profile picture option
+ * 2. change password option
+ * 3. Create Request in Databasse
+ */
+
 import { useState, useEffect } from "react";
 import Image from "next/image";
 import Head from "next/head";

@@ -1,4 +1,5 @@
 import SideNav from "./SideNav";
+import { Button } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core";
 
 const useStyles = makeStyles({
@@ -19,7 +20,8 @@ const UserLayout = ({ children, route }) => {
   const classes = useStyles();
   return (
     <div className={classes.container}>
-      <SideNav route={route}  />
+      <SideNav route={route} />
+
       <div>{children}</div>
     </div>
   );

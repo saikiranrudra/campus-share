@@ -47,14 +47,14 @@ const SideNav = ({ route }) => {
       </a>
 
       <div className={classes.icons}>
-        <IconButton>
+        <IconButton onClick={() => { router.push('/user/') }}>
           <HomeIcon
             style={{
-              fill: route === "/home" ? "#000" : "default",
+              fill: route === "/user/" ? "#000" : "default",
             }}
           />
         </IconButton>
-        <IconButton>
+        <IconButton onClick={() => { router.push('/user/profile') }}>
           <AccountIcon
             style={{
               fill: route === "/profile" ? "#000" : "default",
