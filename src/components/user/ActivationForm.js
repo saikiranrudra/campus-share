@@ -97,10 +97,10 @@ const ActivationForm = ({
           userPhotoWithCollegeAndAdhaarCardResult.data.secure_url,
         email,
       };
-      console.log(adhaarResult);
-      console.log(collegeIdResult);
-      console.log(userPhotoWithCollegeAndAdhaarCardResult);
-      console.log("Body: ", body);
+      // console.log(adhaarResult);
+      // console.log(collegeIdResult);
+      // console.log(userPhotoWithCollegeAndAdhaarCardResult);
+      // console.log("Body: ", body);
       campusShareAPI
         .post("/api/user/activationRequest", body, {
           withCredentials: true,

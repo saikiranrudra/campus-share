@@ -20,11 +20,17 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const FileDropZone = ({ setAcceptedFile, children, acceptedFile, maxFiles = 1, maxSize=15000000 }) => {
+const FileDropZone = ({
+  setAcceptedFile,
+  children,
+  acceptedFile,
+  maxFiles = 1,
+  maxSize = 15000000,
+}) => {
   const classes = useStyles();
   const theme = useTheme();
   const onDrop = useCallback((acceptedFile) => {
-    if(maxFiles === 1) {
+    if (maxFiles === 1) {
       setAcceptedFile(acceptedFile[0]);
       return;
     }
