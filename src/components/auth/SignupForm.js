@@ -7,6 +7,7 @@ import axios from "axios";
 import validationSchema, {
   initialValues,
 } from "./../../validations/auth/signup";
+import campusShareAPI from "../../utils/Apis/campusShareAPI";
 
 const useStyles = makeStyles((theme) => ({
   form: {
@@ -36,7 +37,7 @@ const useStyles = makeStyles((theme) => ({
 const SignupForm = ({ setShowNotification, btnState, setBtnState }) => {
   const classes = useStyles();
   const loadColleges = useCallback(async (inputValue = "") => {
-    const res = await axios.get("/api/college", { name: inputValue });
+    const res = await campusShareAPI.get("/api/college", { name: inputValue });
     const data = res.data.data.map((college) => ({
       label: college.name,
       value: college._id,
