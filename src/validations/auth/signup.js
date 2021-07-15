@@ -22,12 +22,16 @@ export default Yup.object({
     .oneOf([Yup.ref("password")], "Password and Confirm Password dosnt match")
     .required("Enter confirm password"),
   adhaarNumber: Yup.string()
-    .test("len", "Adhaar Number Must be 12 character long", (val) => val ? val.length === 12 : false)
+    .test("len", "Adhaar Number Must be 12 character long", (val) =>
+      val ? val.length === 12 : false
+    )
     .required("Adhaar number is required"),
   collegeEnrollmentNumber: Yup.string().required(
     "College Enrollment Number is required"
   ),
-  upi: Yup.string().required("UPI Id is required").matches(/\w+(@)\w+/, "Invalid UPI type"),
+  upi: Yup.string()
+    .required("UPI Id is required")
+    .matches(/\w+(@)\w+/, "Invalid UPI type"),
 });
 
 export const initialValues = {
@@ -38,5 +42,5 @@ export const initialValues = {
   confirmPassword: "",
   adhaarNumber: "",
   collegeEnrollmentNumber: "",
-  upi: ""
+  upi: "",
 };
