@@ -6,15 +6,17 @@ import Logger from "./Logger";
 
 /**
  * Removed all Not allowed properties from the object
- * @param {Object} object - object with key value pairs 
+ * @param {Object} object - object with key value pairs
  * @param {String[]} filterKeys - array of strings contains property names to allowed
  * @returns Object with only allowed properties
  */
 export const filterObject = (object = {}, filterKeys = []) => {
   let filteredObject = {};
-  filterKeys.forEach(key => object[key] ? filteredObject[key] = object[key] : null)
+  filterKeys.forEach((key) =>
+    object[key] ? (filteredObject[key] = object[key]) : null
+  );
   return filteredObject;
-}
+};
 
 /**
  * response All the data in the model which satisfy condition
@@ -25,26 +27,29 @@ export const filterObject = (object = {}, filterKeys = []) => {
  * @param {number} condition.pageNo - 0 based
  * @returns {Array} - All the data of models which satisfy condition
  */
-export const getByCondition = async (MODEL, { pageNo = 0, ...query }, filterKeys = []) => {
+export const getByCondition = async (
+  MODEL,
+  { pageNo = 0, ...query },
+  filterKeys = []
+) => {
   const filteredQuery = filterObject(query, filterKeys);
   let populate = [];
 
-  if(filteredQuery.populate) {
+  if (filteredQuery.populate) {
     populate = filteredQuery.populate;
-    delete filteredQuery.populate 
+    delete filteredQuery.populate;
   }
   try {
     const LIMIT = 10;
     const dataQuery = MODEL.find(filteredQuery)
       .limit(LIMIT)
-      .skip(pageNo * LIMIT)
-    
-    populate.forEach(populationField => {
+      .skip(pageNo * LIMIT);
+
+    populate.forEach((populationField) => {
       dataQuery.populate(populationField);
-    })
+    });
 
     const data = await dataQuery.exec();
-    
 
     return {
       data,
@@ -119,22 +124,22 @@ export const findByIdAndDelete = async (MODEL, id) => {
  * @example
  * const user = await findById(User, "dsd54a4sd654asd5a4d")
  * @param {*} Model - Mongoose Model Object
- * @param {*} id 
+ * @param {*} id
  * @returns {Object} - User Object
  */
 const findById = async (Model, id) => {
   try {
     const document = await Model.findById(id);
     return document;
-  } catch(err) {
+  } catch (err) {
     throw err;
   }
-}
+};
 
 module.exports = {
   findById,
   findByIdAndDelete,
   findByIdAndUpdate,
   create,
-  getByCondition
-}
+  getByCondition,
+};
