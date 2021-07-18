@@ -27,7 +27,7 @@ export const filterObject = (object = {}, filterKeys = []) => {
  */
 export const getByCondition = async (MODEL, { pageNo = 0, ...query }, filterKeys = []) => {
   const filteredQuery = filterObject(query, filterKeys);
-  let populate;
+  let populate = [];
 
   if(filteredQuery.populate) {
     populate = filteredQuery.populate;
@@ -35,11 +35,16 @@ export const getByCondition = async (MODEL, { pageNo = 0, ...query }, filterKeys
   }
   try {
     const LIMIT = 10;
-    const data = await MODEL.find(filteredQuery)
-      .populate(populate)
+    const dataQuery = MODEL.find(filteredQuery)
       .limit(LIMIT)
       .skip(pageNo * LIMIT)
-      .exec();
+    
+    populate.forEach(populationField => {
+      dataQuery.populate(populationField);
+    })
+
+    const data = await dataQuery.exec();
+    
 
     return {
       data,
