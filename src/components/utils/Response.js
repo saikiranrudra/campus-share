@@ -1,6 +1,11 @@
 import { Snackbar } from "@material-ui/core";
 import MuiAlert from "@material-ui/lab/Alert";
 
+/**
+ * Response Component
+ * @param {open, setOpen, response = { type, message } } props
+ * @returns 
+ */
 const Response = ({ open, setOpen, response }) => {
   function Alert(props) {
     return <MuiAlert elevation={6} variant="filled" {...props} />;
