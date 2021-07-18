@@ -14,17 +14,19 @@ const user = nc({ onError, onNoMatch })
   )
   .use(userProtect)
   .get(async (req, res) => {
-    const filter = { ...req.body };
-    filter.populate = 'college'
-    res.status(200).json(await Factory.getByCondition(User, filter, userFilterKeys))
+    const filter = { ...req.query };
+    filter.populate = ["college"];
+    res
+      .status(200)
+      .json(await Factory.getByCondition(User, filter, userFilterKeys));
   })
   .put(async (req, res) =>
-  res
-  .status(200)
-  .json(await Factory.findByIdAndUpdate(User, req.body._id, req.body))
+    res
+      .status(200)
+      .json(await Factory.findByIdAndUpdate(User, req.body._id, req.body))
   )
   .delete(async (req, res) =>
-  res.status(204).json(await Factory.findByIdAndDelete(User, req.body._id))
-  )
+    res.status(204).json(await Factory.findByIdAndDelete(User, req.body._id))
+  );
 
 export default user;

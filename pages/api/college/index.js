@@ -9,7 +9,11 @@ import dbConnectMiddleware from "./../../../src/middlewares/dbConnectMiddleware"
 const college = nc({ onError, onNoMatch })
   .use(dbConnectMiddleware)
   .get(async (req, res) =>
-    res.status(200).json(await Factory.getByCondition(College, req.body))
+    res
+      .status(200)
+      .json(
+        await Factory.getByCondition(College, Object.keys(req.query), req.query)
+      )
   )
   .post(async (req, res) =>
     res.status(201).json(await Factory.create(College, req.body))
