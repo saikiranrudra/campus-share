@@ -95,11 +95,6 @@ const Profile = ({ user }) => {
       });
   }, []);
 
-  //testing
-  useEffect(() => {
-    console.log(showActivationRequest);
-  }, [showActivationRequest]);
-
   return (
     <>
       <Head>
