@@ -1,5 +1,13 @@
 import axios from "axios"
 
+/**
+ * 
+ * @param {File} file - file Object to be uploaded
+ * @param {String} uploadPreset - Cloudinary uploadPreset
+ * @param {String} cloudName - Cloudinary cloud Name 
+ * @returns Promise
+ */
+
 export const uploadFile = (file, uploadPreset, cloudName) => {
   const url = `https://api.cloudinary.com/v1_1/${cloudName}/image/upload`;
   
