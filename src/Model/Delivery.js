@@ -27,10 +27,12 @@ const deliverySchema = new mongoose.Schema({
     },
     coordinates: {
       type: [Number],
-      address: String,
-      description: String,
       required: true,
     },
+  },
+  pickupAddress: {
+    type: String,
+    required: [true, "pickup address is required"]
   },
   dipartureLocation: {
     //GeoJSON
@@ -42,9 +44,12 @@ const deliverySchema = new mongoose.Schema({
     },
     coordinates: {
       type: [Number],
-      address: String,
       required: true,
     },
+  },
+  dipartureAddress: {
+    type: String,
+    required: [true, "diparture address is required"]
   },
   reciver: {
     type: mongoose.Schema.Types.ObjectId,
