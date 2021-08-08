@@ -27,7 +27,14 @@ const useStyles = makeStyles({
   },
 });
 
-const CreateDelivery = ({ open, setOpen, user }) => {
+const CreateDelivery = ({
+  open,
+  setOpen,
+  user,
+  title,
+  initialValues: initialValuesProps,
+  btnText
+}) => {
   const classes = useStyles();
   const [fromProductSnap, setFromProductSnap] = useState(null);
   const [showResponse, setShowResponse] = useState(false);
@@ -106,11 +113,29 @@ const CreateDelivery = ({ open, setOpen, user }) => {
     }
   };
 
+  const getInitailValues = () => {
+    if (!initialValuesProps) {
+      return initialValues;
+    }
+
+    return {
+      title: initialValuesProps.title,
+      description: initialValuesProps.description,
+      destinationLongitude: initialValuesProps.dipartureLocation.coordinates[0],
+      destinationLatitude: initialValuesProps.dipartureLocation.coordinates[1],
+      destinationAddress: initialValuesProps.dipartureAddress,
+      pickupLongitude: initialValuesProps.pickupLocation.coordinates[0],
+      pickupLatitude: initialValuesProps.pickupLocation.coordinates[1],
+      pickupAddress: initialValuesProps.pickupAddress,
+      reciverId: initialValuesProps.reciver,
+    };
+  };
+
   return (
     <>
       <Dialog open={open}>
         <Formik
-          initialValues={initialValues}
+          initialValues={getInitailValues()}
           onSubmit={handleFormSubmit}
           validationSchema={validationSchema}
         >
@@ -123,7 +148,7 @@ const CreateDelivery = ({ open, setOpen, user }) => {
             handleSubmit,
           }) => (
             <>
-              <DialogTitle>Create Delivery</DialogTitle>
+              <DialogTitle>{title}</DialogTitle>
               <DialogContent>
                 <FormControl>
                   <TextField
@@ -131,7 +156,7 @@ const CreateDelivery = ({ open, setOpen, user }) => {
                     type="text"
                     name="title"
                     variant="outlined"
-                    values={values.title}
+                    value={values.title}
                     onChange={handleChange}
                     onBlur={handleBlur}
                     error={!!(errors.title && touched.title)}
@@ -146,7 +171,7 @@ const CreateDelivery = ({ open, setOpen, user }) => {
                     name="description"
                     multiline
                     variant="outlined"
-                    values={values.description}
+                    value={values.description}
                     onChange={handleChange}
                     onBlur={handleBlur}
                     error={!!(errors.description && touched.description)}
@@ -163,7 +188,7 @@ const CreateDelivery = ({ open, setOpen, user }) => {
                     type="number"
                     name="destinationLatitude"
                     variant="outlined"
-                    values={values.destinationLatitude}
+                    value={values.destinationLatitude}
                     onChange={handleChange}
                     onBlur={handleBlur}
                     error={
@@ -187,7 +212,7 @@ const CreateDelivery = ({ open, setOpen, user }) => {
                     type="number"
                     name="destinationLongitude"
                     variant="outlined"
-                    values={values.destinationLongitude}
+                    value={values.destinationLongitude}
                     onChange={handleChange}
                     onBlur={handleBlur}
                     error={
@@ -211,7 +236,7 @@ const CreateDelivery = ({ open, setOpen, user }) => {
                     type="text"
                     name="destinationAddress"
                     variant="outlined"
-                    values={values.destinationAddress}
+                    value={values.destinationAddress}
                     onChange={handleChange}
                     onBlur={handleBlur}
                     error={
@@ -234,7 +259,7 @@ const CreateDelivery = ({ open, setOpen, user }) => {
                     type="number"
                     name="pickupLatitude"
                     variant="outlined"
-                    values={values.pickupLatitude}
+                    value={values.pickupLatitude}
                     onChange={handleChange}
                     onBlur={handleBlur}
                     error={!!(errors.pickupLatitude && touched.pickupLatitude)}
@@ -250,7 +275,7 @@ const CreateDelivery = ({ open, setOpen, user }) => {
                     type="number"
                     name="pickupLongitude"
                     variant="outlined"
-                    values={values.pickupLongitude}
+                    value={values.pickupLongitude}
                     onChange={handleChange}
                     onBlur={handleBlur}
                     error={
@@ -268,7 +293,7 @@ const CreateDelivery = ({ open, setOpen, user }) => {
                     type="text"
                     name="pickupAddress"
                     variant="outlined"
-                    values={values.pickupAddress}
+                    value={values.pickupAddress}
                     onChange={handleChange}
                     onBlur={handleBlur}
                     error={!!(errors.pickupAddress && touched.pickupAddress)}
@@ -323,7 +348,7 @@ const CreateDelivery = ({ open, setOpen, user }) => {
                   onClick={handleSubmit}
                   disabled={response.isLoading}
                 >
-                  {response.isLoading ? "Please Wait.." : "Create Delivery"}
+                  {response.isLoading ? "Please Wait.." : btnText}
                 </Button>
               </DialogActions>
             </>
@@ -337,6 +362,12 @@ const CreateDelivery = ({ open, setOpen, user }) => {
       />
     </>
   );
+};
+
+CreateDelivery.defaultProps = {
+  title: "Create Delivery",
+  initialValues: null,
+  btnText: "Create Delivery"
 };
 
 export default CreateDelivery;
