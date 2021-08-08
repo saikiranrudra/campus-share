@@ -77,8 +77,8 @@ const deliverySchema = new mongoose.Schema({
   },
   status: {
     type: String,
-    enum: ["unassigned", "assigned", "dispached", "recived"],
-    default: "unassigned",
+    enum: ["unassigned", "assigned", "dispached", "recived", "unpaid"],
+    default: "unpaid",
   },
   transections: [{
     type: mongoose.Schema.Types.ObjectId,
