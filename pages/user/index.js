@@ -4,6 +4,7 @@ import UserLayout from "../../src/components/layout/UserLayout";
 import CreateDelivery from "../../src/components/delivery/CreateDelivery";
 import { userAuthCheck } from "./../../src/utils/userAuthCheck";
 import Card from "../../src/components/utils/Card";
+import CreatedDeliveries from "../../src/components/delivery/CreatedDeliveries";
 
 const Home = ({ user }) => {
   const [open, setOpen] = useState(false);
@@ -22,13 +23,7 @@ const Home = ({ user }) => {
           </Button>
         </div>
         <div>
-          <Card title="Created Deliveries">
-            <Typography variant="body">
-              this is the content of the card which is written here, and now i
-              am just typing some random text which dosnt make any sensen just
-              wrote to fill the card with some text
-            </Typography>
-          </Card>
+          <CreatedDeliveries user={user} />
         </div>
       </UserLayout>
       <CreateDelivery open={open} setOpen={setOpen} user={user} />
