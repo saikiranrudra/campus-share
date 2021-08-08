@@ -10,6 +10,7 @@ import {
   IconButton,
   Button,
 } from "@material-ui/core";
+import CreateDelivery from "./CreateDelivery";
 import { Edit as EditIcon, Delete as DeleteIcon } from "@material-ui/icons";
 import campusShareAPI from "../../utils/Apis/campusShareAPI";
 import Card from "../utils/Card";
@@ -29,6 +30,7 @@ const useStyle = makeStyles({
 const CreatedDeliveries = ({ user }) => {
   const classes = useStyle();
   const [deliveries, setDeliveries] = useState([]);
+  const [openDialog, setOpenDialog] = useState(false);
   useEffect(() => {
     campusShareAPI
       .get("/api/delivery", {
@@ -49,54 +51,68 @@ const CreatedDeliveries = ({ user }) => {
     unpaid: "#341f97",
   };
 
-  return (
-    <Card title="Created Deliveries">
-      <Table>
-        <TableHead>
-          <TableRow className={classes.title}>
-            <TableCell>Delivery Id</TableCell>
-            <TableCell>Status</TableCell>
-            <TableCell>Actions</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {deliveries.map((deliverie, key) => (
-            <TableRow key={key}>
-              <TableCell>{deliverie._id}</TableCell>
-              <TableCell>
-                <span
-                  className={classes.badge}
-                  style={{
-                    color: colors[deliverie.status],
-                    backgroundColor: lighten(colors[deliverie.status], 0.5),
-                  }}
-                >
-                  {deliverie.status}
-                </span>
-              </TableCell>
-              <TableCell>
-                {deliverie.status === "unpaid" && (
-                  <Button variant="contained" size="small" color="primary">
-                    Pay Now
-                  </Button>
-                )}
-                {deliverie.status !== "assigned" && (
-                  <IconButton color="primary">
-                    <EditIcon />
-                  </IconButton>
-                )}
 
-                {deliverie.status !== "assigned" && (
-                  <IconButton color="primary">
-                    <DeleteIcon />
-                  </IconButton>
-                )}
-              </TableCell>
+  return (
+    <>
+      <Card title="Created Deliveries">
+        <Table>
+          <TableHead>
+            <TableRow className={classes.title}>
+              <TableCell>Delivery Id</TableCell>
+              <TableCell>Status</TableCell>
+              <TableCell>Actions</TableCell>
             </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </Card>
+          </TableHead>
+          <TableBody>
+            {deliveries.map((deliverie, key) => (
+              <TableRow key={key}>
+                <TableCell>{deliverie._id}</TableCell>
+                <TableCell>
+                  <span
+                    className={classes.badge}
+                    style={{
+                      color: colors[deliverie.status],
+                      backgroundColor: lighten(colors[deliverie.status], 0.5),
+                    }}
+                  >
+                    {deliverie.status}
+                  </span>
+                </TableCell>
+                <TableCell>
+                  {deliverie.status === "unpaid" && (
+                    <Button variant="contained" size="small" color="primary">
+                      Pay Now
+                    </Button>
+                  )}
+                  {deliverie.status !== "assigned" && (
+                    <IconButton
+                      color="primary"
+                      onClick={() => setOpenDialog(true)}
+                    >
+                      <EditIcon />
+                    </IconButton>
+                  )}
+
+                  {deliverie.status !== "assigned" && (
+                    <IconButton color="primary">
+                      <DeleteIcon />
+                    </IconButton>
+                  )}
+                </TableCell>
+                <CreateDelivery
+                  user={user}
+                  open={openDialog}
+                  setOpen={setOpenDialog}
+                  title={"Edit Delivery"}
+                  initialValues={deliverie}
+                  btnText="Save Changes"
+                />
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </Card>
+    </>
   );
 };
 
