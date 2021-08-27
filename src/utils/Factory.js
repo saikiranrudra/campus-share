@@ -92,10 +92,12 @@ const findByIdAndUpdate = async (MODEL, _id, newData) => {
     if (newData.password) {
       delete newData.password;
     }
+    console.log("NEW", newData);
+    console.log("_id: ", _id);
     const data = await MODEL.findByIdAndUpdate(
       _id,
-      { $set: newData },
-      { runValidators: true, new: true }
+      newData,
+      { new: true }
     );
     return data;
   } catch (err) {

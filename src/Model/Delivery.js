@@ -23,7 +23,6 @@ const deliverySchema = new mongoose.Schema({
       type: String,
       default: "Point",
       enum: ["Point"],
-      required: true,
     },
     coordinates: {
       type: [Number],
@@ -40,7 +39,6 @@ const deliverySchema = new mongoose.Schema({
       type: String,
       default: "Point",
       enum: ["Point"],
-      required: true,
     },
     coordinates: {
       type: [Number],

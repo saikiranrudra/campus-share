@@ -27,13 +27,19 @@ const useStyles = makeStyles({
   },
 });
 
+/**
+ * For Creating and editing Deliveries
+ */
+
 const CreateDelivery = ({
   open,
   setOpen,
   user,
   title,
   initialValues: initialValuesProps,
-  btnText
+  btnText,
+  ctype,
+  callback
 }) => {
   const classes = useStyles();
   const [fromProductSnap, setFromProductSnap] = useState(null);
@@ -64,15 +70,16 @@ const CreateDelivery = ({
   const handleFormSubmit = async (values) => {
     try {
       setResponse({ ...response, isLoading: true });
-      if (!fromProductSnap) {
+
+      if (!fromProductSnap && ctype === "CREATE") {
         throw new Error("Please upload product Snap");
       }
 
-      const fromProductSnapLink = await uploadFile(
+      const fromProductSnapLink = ctype === "CREATE" ? await uploadFile(
         fromProductSnap,
         process.env.CLOUDINARY_UPLOAD_PRESET,
         process.env.CLOUDINARY_CLOUD_NAME
-      );
+      ) : null;
 
       const deliveryObject = {
         title: values.title,
@@ -90,20 +97,38 @@ const CreateDelivery = ({
         dipartureAddress: values.destinationAddress,
         reciver: values.reciverId,
         owner: user._id,
-        fromProductSnap: fromProductSnapLink.data.secure_url,
+        fromProductSnap: ctype === "CREATE" ? fromProductSnapLink.data.secure_url: undefined,
       };
 
-      // create delivery api and upload the image
-      await campusShareAPI.post("/api/delivery", deliveryObject);
-
-      setResponse({
-        type: "success",
-        message: "Delivery Created Successfully",
-        isLoading: false,
-      });
+      if(ctype === "CREATE") {
+        // create delivery document and upload the image
+        await campusShareAPI.post("/api/delivery", deliveryObject);
+        setResponse({
+          type: "success",
+          message: "Delivery Created Successfully",
+          isLoading: false,
+        });
+      }
+      
+      if(ctype === "UPDATE") {
+        deliveryObject._id = initialValuesProps._id;
+        await campusShareAPI.put("/api/delivery", deliveryObject);
+        setResponse({
+          type: "success",
+          message: "Delivery Updated Successfully",
+          isLoading: false,
+        });
+      }
+      
+      if(callback) {
+        callback();
+      }
+      
       setShowResponse(true);
+
     } catch (err) {
       Logger.error(err);
+      console.error(err);
       setResponse({
         type: "error",
         message: err.response ? err.response.message : err.message,
@@ -117,8 +142,8 @@ const CreateDelivery = ({
     if (!initialValuesProps) {
       return initialValues;
     }
-
     return {
+      _id: initialValuesProps._id,
       title: initialValuesProps.title,
       description: initialValuesProps.description,
       destinationLongitude: initialValuesProps.dipartureLocation.coordinates[0],
@@ -324,13 +349,15 @@ const CreateDelivery = ({
                     </Typography>
                   ) : null}
 
-                  <FileDropZone
-                    maxFiles={1}
-                    acceptedFile={fromProductSnap}
-                    setAcceptedFile={setFromProductSnap}
-                  >
-                    <span>Drop or click to upload your Item Picture</span>
-                  </FileDropZone>
+                  {ctype === "CREATE" &&
+                    <FileDropZone
+                      maxFiles={1}
+                      acceptedFile={fromProductSnap}
+                      setAcceptedFile={setFromProductSnap}
+                    >
+                      <span>Drop or click to upload your Item Picture</span>
+                    </FileDropZone>
+                  }
                 </FormControl>
               </DialogContent>
               <DialogActions>
@@ -367,7 +394,8 @@ const CreateDelivery = ({
 CreateDelivery.defaultProps = {
   title: "Create Delivery",
   initialValues: null,
-  btnText: "Create Delivery"
+  btnText: "Create Delivery",
+  ctype: "CREATE"
 };
 
 export default CreateDelivery;

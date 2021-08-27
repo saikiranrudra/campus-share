@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import {
   makeStyles,
   Table,
@@ -31,7 +31,9 @@ const CreatedDeliveries = ({ user }) => {
   const classes = useStyle();
   const [deliveries, setDeliveries] = useState([]);
   const [openDialog, setOpenDialog] = useState(false);
-  useEffect(() => {
+  const [selectedDeliverie, setSelectedDeliverie] = useState(null);
+
+  const fetchDeliveries = useCallback(() => {
     campusShareAPI
       .get("/api/delivery", {
         params: {
@@ -41,6 +43,10 @@ const CreatedDeliveries = ({ user }) => {
       .then((res) => {
         setDeliveries(res.data.data);
       });
+  }, [user, setDeliveries]);
+
+  useEffect(() => {
+    fetchDeliveries();
   }, []);
 
   const colors = {
@@ -51,7 +57,6 @@ const CreatedDeliveries = ({ user }) => {
     unpaid: "#341f97",
   };
 
-
   return (
     <>
       <Card title="Created Deliveries">
@@ -59,14 +64,16 @@ const CreatedDeliveries = ({ user }) => {
           <TableHead>
             <TableRow className={classes.title}>
               <TableCell>Delivery Id</TableCell>
+              <TableCell>Title</TableCell>
               <TableCell>Status</TableCell>
               <TableCell>Actions</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {deliveries.map((deliverie, key) => (
-              <TableRow key={key}>
+            {deliveries.map((deliverie) => (
+              <TableRow key={deliverie._id}>
                 <TableCell>{deliverie._id}</TableCell>
+                <TableCell>{deliverie.title}</TableCell>
                 <TableCell>
                   <span
                     className={classes.badge}
@@ -87,7 +94,10 @@ const CreatedDeliveries = ({ user }) => {
                   {deliverie.status !== "assigned" && (
                     <IconButton
                       color="primary"
-                      onClick={() => setOpenDialog(true)}
+                      onClick={() => {
+                        setSelectedDeliverie(deliverie);
+                        setOpenDialog(true);
+                      }}
                     >
                       <EditIcon />
                     </IconButton>
@@ -99,19 +109,23 @@ const CreatedDeliveries = ({ user }) => {
                     </IconButton>
                   )}
                 </TableCell>
-                <CreateDelivery
-                  user={user}
-                  open={openDialog}
-                  setOpen={setOpenDialog}
-                  title={"Edit Delivery"}
-                  initialValues={deliverie}
-                  btnText="Save Changes"
-                />
               </TableRow>
             ))}
           </TableBody>
         </Table>
       </Card>
+      { selectedDeliverie &&
+        <CreateDelivery
+          user={user}
+          open={openDialog}
+          setOpen={setOpenDialog}
+          title={"Edit Delivery"}
+          initialValues={selectedDeliverie}
+          btnText="Save Changes"
+          ctype="UPDATE"
+          callback={fetchDeliveries}
+        />
+      }
     </>
   );
 };
