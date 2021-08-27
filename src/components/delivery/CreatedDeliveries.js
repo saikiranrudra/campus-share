@@ -14,6 +14,8 @@ import CreateDelivery from "./CreateDelivery";
 import { Edit as EditIcon, Delete as DeleteIcon } from "@material-ui/icons";
 import campusShareAPI from "../../utils/Apis/campusShareAPI";
 import Card from "../utils/Card";
+import Response from "../utils/Response";
+import Logger from "../../utils/Logger";
 
 const useStyle = makeStyles({
   title: {
@@ -32,6 +34,12 @@ const CreatedDeliveries = ({ user }) => {
   const [deliveries, setDeliveries] = useState([]);
   const [openDialog, setOpenDialog] = useState(false);
   const [selectedDeliverie, setSelectedDeliverie] = useState(null);
+  const [open, setOpen] = useState(false);
+  const [message, setMessage] = useState({
+    type: "success",
+    message: "Delivery Deleted Successfully",
+    isLoading: false
+  });
 
   const fetchDeliveries = useCallback(() => {
     campusShareAPI
@@ -48,6 +56,21 @@ const CreatedDeliveries = ({ user }) => {
   useEffect(() => {
     fetchDeliveries();
   }, []);
+
+  const handleDelete = useCallback((deliverie) => {
+    setMessage({ ...message, isLoading: true })
+    campusShareAPI.delete("/api/delivery", { params: { _id: deliverie._id } })
+    .then(() => {
+        setMessage({ type: "success", message: "Delivery Deleted Successfully", isLoading: false })
+        setOpen(true);
+        fetchDeliveries();
+      }).catch(err => {
+        setMessage({ type: "error", message: "Something went wrong!", isLoading: false })
+        Logger.error(err);
+        setOpen(true);
+      });
+    },
+    []);
 
   const colors = {
     unassigned: "#eb3b5a",
@@ -104,7 +127,13 @@ const CreatedDeliveries = ({ user }) => {
                   )}
 
                   {deliverie.status !== "assigned" && (
-                    <IconButton color="primary">
+                    <IconButton
+                      color="primary"
+                      disabled={message.isLoading}
+                      onClick={() => {
+                        handleDelete(deliverie);
+                      }}
+                    >
                       <DeleteIcon />
                     </IconButton>
                   )}
@@ -114,7 +143,7 @@ const CreatedDeliveries = ({ user }) => {
           </TableBody>
         </Table>
       </Card>
-      { selectedDeliverie &&
+      {selectedDeliverie && (
         <CreateDelivery
           user={user}
           open={openDialog}
@@ -125,7 +154,8 @@ const CreatedDeliveries = ({ user }) => {
           ctype="UPDATE"
           callback={fetchDeliveries}
         />
-      }
+      )}
+      <Response open={open} setOpen={setOpen} response={message} />
     </>
   );
 };

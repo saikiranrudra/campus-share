@@ -31,7 +31,8 @@ const delivery = nc({ onError, onNoMatch })
       .status(200)
       .json(await Factory.findByIdAndUpdate(Delivery, req.body._id, req.body))
   )
-  .delete(async (req, res) => 
-    res.status(204).json(await Factory.findByIdAndDelete(Delivery, req.body._id)));
+  .delete(async (req, res) => {
+    res.status(204).json(await Factory.findByIdAndDelete(Delivery, req.query._id));
+  });
 
 export default delivery;
