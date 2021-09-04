@@ -16,7 +16,7 @@ import Logger from "./Logger";
  * 3. UnAuthenticated User is reverted back to /auth/sign page
  */
 
-export const userAuthCheck = async (ctx) => {
+export const userAuthCheck = async (ctx, propsVals = {}) => {
   const token = cookies(ctx).authentication;
   if (token) {
     const tokenData = jwt.verify(token, process.env.JWT_SECRET);
@@ -33,7 +33,8 @@ export const userAuthCheck = async (ctx) => {
 
       return {
         props: {
-          user: res.data.data[0] || {}
+          user: res.data.data[0] || {},
+          ...propsVals
         },
       };
     } catch (err) {
@@ -54,6 +55,8 @@ export const userAuthCheck = async (ctx) => {
   }
 
   return {
-    props: {},
+    props: {
+      ...propsVals
+    },
   };
 }

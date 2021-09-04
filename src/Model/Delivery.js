@@ -75,14 +75,12 @@ const deliverySchema = new mongoose.Schema({
   },
   status: {
     type: String,
-    enum: ["unassigned", "assigned", "dispached", "recived", "unpaid"],
+    enum: ["unassigned", "assigned", "recived", "paid", "unpaid"],
     default: "unpaid",
   },
-  transections: [{
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Transection'
-  }], // transection ids of delivery
-
+  paymentId: String,
+  orderId: String,
+  razorpaySignature: String,
 });
 
 deliverySchema.index({ owner: 1, deliveryPerson: 1 });
