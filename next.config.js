@@ -28,10 +28,14 @@ module.exports = (phase) => {
       COOKIE_EXPIRE_IN: 60 * 60 * 24 * 2, // 2 days
       isHTTPS: false,
       BASE_URL: 'http://localhost:3000',
+     
       CLOUDINARY_CLOUD_NAME: 'campus-share',
       CLOUDINARY_API_KEY: '213328178659842',
       CLOUDINARY_API_SECRET: 'XFVm60T6fC-dIB7RmlAiOB8u5SU',
-      CLOUDINARY_UPLOAD_PRESET: 'c135vbnh'
+      CLOUDINARY_UPLOAD_PRESET: 'c135vbnh',
+      
+      PAYMENT_KEY_ID: 'rzp_test_25OKe00HimJQnA',
+      PAYMENT_KEY_SECRET: 'LR9TD39OsQ8rMgu3MWtCnt9A'
     },
   };
 };

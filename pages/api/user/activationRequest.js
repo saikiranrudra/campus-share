@@ -11,36 +11,43 @@ const activationRequest = nc({ onError, onNoMatch })
   .use(dbConnectMiddleware)
   .use(userProtect)
   .post(async (req, res) => {
-    console.log("Request Body", req.body);
-    const { adhaarCard, collegeId, userPhoneWithCollegeAndAdhaarCard, email } =
-      req.body;
-
-    if (!adhaarCard || !collegeId || !userPhoneWithCollegeAndAdhaarCard) {
-      res.status(400).json({ message: "All three images are required" });
-      return;
-    }
-
-    if (!email) {
-      res.status(400).json({ message: "Unable to find user" });
-      return;
-    }
-
-    const user = await User.findOne({ email });
-
-    if (!user) {
-      res.status(401).json({
-        message: "User not found",
+    try {
+      console.log("Request Body", req.body);
+      const { adhaarCard, collegeId, userPhoneWithCollegeAndAdhaarCard, email } =
+        req.body;
+  
+      if (!adhaarCard || !collegeId || !userPhoneWithCollegeAndAdhaarCard) {
+        res.status(400).json({ message: "All three images are required" });
+        return;
+      }
+  
+      if (!email) {
+        res.status(400).json({ message: "Unable to find user" });
+        return;
+      }
+  
+      const user = await User.findOne({ email });
+  
+      if (!user) {
+        res.status(401).json({
+          message: "User not found",
+        });
+        return;
+      }
+  
+      await User.findByIdAndUpdate(user._id, {
+        adhaarId: adhaarCard,
+        collegeId,
+        proofImage: userPhoneWithCollegeAndAdhaarCard,
       });
+      await ActivationRequest.create({ user: user._id });
+      res.status(200).json({ message: "Request Placed Successfully" });
+    } catch(err) {
+      console.log(err);
+      console.log(err.message);
+      res.status(500).json({ message: "Something went wrong!" });
       return;
     }
-
-    await User.findByIdAndUpdate(user._id, {
-      adhaarId: adhaarCard,
-      collegeId,
-      proofImage: userPhoneWithCollegeAndAdhaarCard,
-    });
-    await ActivationRequest.create({ user: user._id });
-    res.status(200).json({ message: "Request Placed Successfully" });
   })
   .get(async (req, res) => {
     const query = req.query;

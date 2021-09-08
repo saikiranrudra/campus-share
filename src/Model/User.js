@@ -49,6 +49,7 @@ const userSchema = new mongoose.Schema({
   },
   collegeId: String,
   adhaarId: String,
+  proofImage: String,
   adhaarNumber: {
     type: String,
     validate: {
@@ -63,7 +64,6 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: [true, "College Enrollment Number is required"]
   },
-  proofImage: String,
   passwordChangedAt: Date,
   passwordResetToken: String,
   passwordResetExpires: Date,

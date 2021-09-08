@@ -78,7 +78,6 @@ const Profile = ({ user }) => {
   const classes = useStyle();
   const [openActivationForm, setOpenActivationForm] = useState(false);
   const [showActivationRequest, setShowActivationRequest] = useState(false);
-
   useEffect(() => {
     campusShareAPI
       .get("/api/user/activationRequest", {

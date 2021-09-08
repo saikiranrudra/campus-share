@@ -10,12 +10,12 @@ const signin = nc({ onError, onNoMatch })
   .use(dbConnectMiddleware)
   .post(async (req, res) => {
     const { email: candidateEmail, password: candidatePassword } = req.body;
-
+    
     const user = await User.findOne(
       { email: candidateEmail },
       "email password role"
     ).exec();
-
+    
     if (!user) {
       res.status(401).json({ message: "Invalid Email or Password" });
       res.end();

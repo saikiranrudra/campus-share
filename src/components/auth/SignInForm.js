@@ -48,7 +48,6 @@ const SigninForm = ({ setShowNotification, btnState, setBtnState }) => {
   const handleSignIn = useCallback(
     async (values) => {
       const { email, password } = values;
-
       setBtnState({ ...btnState, isLoading: true});
       await campusShareAPI
         .post("/api/auth/signin", { email, password })

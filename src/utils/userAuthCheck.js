@@ -20,17 +20,17 @@ export const userAuthCheck = async (ctx, propsVals = {}) => {
   const token = cookies(ctx).authentication;
   if (token) {
     const tokenData = jwt.verify(token, process.env.JWT_SECRET);
+    console.log(tokenData);
     try {
       const res = await axios.get(`${process.env.BASE_URL}/api/user`, {
         withCredentials: true,
-        data: {
+        params: {
           email: tokenData.email,
         },
         headers: {
           cookie: ctx.req?.headers.cookie,
         },
       });
-
       return {
         props: {
           user: res.data.data[0] || {},

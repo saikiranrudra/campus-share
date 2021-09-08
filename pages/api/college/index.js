@@ -12,7 +12,7 @@ const college = nc({ onError, onNoMatch })
     res
       .status(200)
       .json(
-        await Factory.getByCondition(College, Object.keys(req.query), req.query)
+        await Factory.getByCondition(College, req.query)
       )
   )
   .post(async (req, res) =>
