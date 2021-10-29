@@ -19,7 +19,7 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: theme.palette.primary.main,
     margin: "1rem 0",
     padding: "1.5rem 0",
-    height: "90vh",
+    // height: "90vh",
     position: "sticky",
   },
 

@@ -29,7 +29,12 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const DeliveryCard = ({ delivery, user, getAllDeliveris }) => {
+const DeliveryCard = ({
+  delivery,
+  user,
+  getAllDeliveris = () => {},
+  isAcceptedOrder = false,
+}) => {
   const classes = useStyles();
   const [open, setOpen] = useState(false);
   const [response, setResponse] = useState({
@@ -92,15 +97,17 @@ const DeliveryCard = ({ delivery, user, getAllDeliveris }) => {
             1.50₹
           </Typography>
         </div>
-        <Button
-          color="primary"
-          variant="contained"
-          style={{ alignSelf: "center" }}
-          onClick={handleAccept}
-          disabled={response.isLoading}
-        >
-          Accept
-        </Button>
+        {!isAcceptedOrder && (
+          <Button
+            color="primary"
+            variant="contained"
+            style={{ alignSelf: "center" }}
+            onClick={handleAccept}
+            disabled={response.isLoading}
+          >
+            Accept
+          </Button>
+        )}
       </Paper>
       <Response open={open} setOpen={setOpen} response={response} />
     </>

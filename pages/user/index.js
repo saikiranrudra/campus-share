@@ -8,6 +8,7 @@ import AllDeliveries from "../../src/components/delivery/AllDeliveries";
 import campusShareAPI from "../../src/utils/Apis/campusShareAPI";
 import Logger from "../../src/utils/Logger";
 import Response from "./../../src/components/utils/Response";
+import AcceptedDeliveries from "../../src/components/delivery/AcceptedDeliveries";
 
 /**
  * TODOS
@@ -19,6 +20,7 @@ const useStyles = makeStyles({
   container: {
     display: "grid",
     gridTemplateColumns: "7fr 9fr",
+    gridTemplateRows: "1fr 1fr",
     gap: ".3rem",
   },
 });
@@ -65,6 +67,7 @@ const Home = ({ user, keyId }) => {
         <div className={classes.container}>
           <CreatedDeliveries user={user} keyId={keyId} />
           <AllDeliveries deliveries={deliveries} getAllDeliveris={getAllDeliveris} user={user} />
+          <AcceptedDeliveries user={user} />
         </div>
       </UserLayout>
       <CreateDelivery open={open} setOpen={setOpen} user={user} />

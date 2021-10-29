@@ -7,6 +7,11 @@ const useStyles = makeStyles({
   },
   container: {
     padding: ".8rem 1rem",
+    height: "100%"
+  },
+  list: {
+    overflowY: "scroll",
+    height: "85%",
   },
 });
 
@@ -17,7 +22,7 @@ const Card = ({ title, children }) => {
       <Typography variant="h6" component="h2" className={classes.title}>
         {title}
       </Typography>
-      {children}
+      <div className={classes.list}>{children}</div>
     </Paper>
   );
 };
