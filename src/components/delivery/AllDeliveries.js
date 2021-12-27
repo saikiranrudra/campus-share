@@ -1,5 +1,5 @@
 import Card from "../utils/Card";
-import DeliveryCard from "./deliveryCard";
+import DeliveryCard from "./DeliveryCard";
 
 const AllDeliveries = ({ deliveries = [], getAllDeliveris, user }) => {
   return (

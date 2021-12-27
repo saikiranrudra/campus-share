@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import campusShareAPI from "../../utils/Apis/campusShareAPI";
 import Logger from "../../utils/Logger";
 import Card from "../utils/Card";
-import DeliveryCard from "./deliveryCard";
+import DeliveryCard from "./DeliveryCard";
 
 const AcceptedDeliveries = ({ user }) => {
   const [orders, setOrders] = useState([])
