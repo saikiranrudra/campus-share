@@ -22,12 +22,12 @@ module.exports = (phase) => {
     env: {
       // env variables common for all phases
       appName: "campus share",
-      MONGODB_URI: "https://campus-share-mza4j9eu4-saikiranrudra.vercel.app/",
+      MONGODB_URI: "mongodb+srv://campus_share:9898123@mflix.5g5ua.mongodb.net/myFirstDatabase?retryWrites=true&w=majority",
       JWT_SECRET: 'thisisasecreatkeywhichwillbechangedhereaswellasinproduction',
       JWT_EXPIRE_IN: '2 days',
       COOKIE_EXPIRE_IN: 60 * 60 * 24 * 2, // 2 days
       isHTTPS: false,
-      BASE_URL: 'http://localhost:3000',
+      BASE_URL: 'https://campus-share.vercel.app',
      
       CLOUDINARY_CLOUD_NAME: 'campus-share',
       CLOUDINARY_API_KEY: '213328178659842',
