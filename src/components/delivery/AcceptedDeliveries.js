@@ -5,21 +5,35 @@ import Card from "../utils/Card";
 import DeliveryCard from "./DeliveryCard";
 
 const AcceptedDeliveries = ({ user }) => {
-  const [orders, setOrders] = useState([])
+  const [orders, setOrders] = useState([]);
+
+  const getAllDeliveris = () => {
+    campusShareAPI
+      .get("/api/delivery", {
+        params: {
+          deliveryPerson: user._id,
+          status: "assigned"
+        },
+      })
+      .then((res) => setOrders(res.data.data))
+      .catch((err) => Logger.error(err));
+  };
 
   useEffect(() => {
-    campusShareAPI.get('/api/delivery', {
-      params: {
-        deliveryPerson: user._id
-      }
-    })
-    .then(res => setOrders(res.data.data))
-    .catch(err => Logger.error(err));
-  }, [])
+    getAllDeliveris();
+  }, []);
 
   return (
     <Card title="Accepted Deliveries">
-      {orders.map(order => <DeliveryCard user={user} key={order._id} delivery={order} isAcceptedOrder={true} />)}
+      {orders.map((order) => (
+        <DeliveryCard
+          user={user}
+          key={order._id}
+          delivery={order}
+          getAllDeliveris={getAllDeliveris}
+          isAcceptedOrder={true}
+        />
+      ))}
     </Card>
   );
 };

@@ -11,6 +11,7 @@ const AllDeliveries = ({ deliveries = [], getAllDeliveris, user }) => {
             delivery={delivery}
             getAllDeliveris={getAllDeliveris}
             user={user}
+            isDeliveryPool={true}
           />
         ))}
       </Card>

@@ -34,6 +34,7 @@ const DeliveryCard = ({
   user,
   getAllDeliveris = () => {},
   isAcceptedOrder = false,
+  isDeliveryPool = false
 }) => {
   const classes = useStyles();
   const [open, setOpen] = useState(false);
@@ -43,18 +44,18 @@ const DeliveryCard = ({
     isLoading: false,
   });
 
-  const handleAccept = () => {
+  const handleAccept = (updates = {}) => {
     setResponse({ ...response, isLoading: true });
     campusShareAPI
       .put("/api/delivery", {
         ...delivery,
         deliveryPerson: user._id,
-        status: "assigned",
+        ...updates
       })
       .then((res) => {
         getAllDeliveris();
         setResponse({
-          message: "✔ Delivery Assigned Successfully",
+          message: "✔ Delivery Updated Successfully",
           type: "success",
           isLoading: false,
         });
@@ -97,12 +98,24 @@ const DeliveryCard = ({
             1.50₹
           </Typography>
         </div>
-        {!isAcceptedOrder && (
+        {isAcceptedOrder && (
           <Button
             color="primary"
             variant="contained"
             style={{ alignSelf: "center" }}
-            onClick={handleAccept}
+            onClick={() => { handleAccept({ status: "recived" }) }}
+            disabled={response.isLoading}
+          >
+            Done
+          </Button>
+        )}
+
+        {isDeliveryPool && (
+          <Button
+            color="primary"
+            variant="contained"
+            style={{ alignSelf: "center" }}
+            onClick={() => { handleAccept({ status: "assigned" }) }}
             disabled={response.isLoading}
           >
             Accept

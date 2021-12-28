@@ -9,6 +9,7 @@ import campusShareAPI from "../../src/utils/Apis/campusShareAPI";
 import Logger from "../../src/utils/Logger";
 import Response from "./../../src/components/utils/Response";
 import AcceptedDeliveries from "../../src/components/delivery/AcceptedDeliveries";
+import CompletedOrders from "../../src/components/delivery/CompletedOrders";
 
 /**
  * TODOS
@@ -68,6 +69,7 @@ const Home = ({ user, keyId }) => {
           <CreatedDeliveries user={user} keyId={keyId} />
           <AllDeliveries deliveries={deliveries} getAllDeliveris={getAllDeliveris} user={user} />
           <AcceptedDeliveries user={user} />
+          <CompletedOrders user={user} />
         </div>
       </UserLayout>
       <CreateDelivery open={open} setOpen={setOpen} user={user} />
