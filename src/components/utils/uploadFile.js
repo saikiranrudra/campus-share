@@ -8,7 +8,7 @@ import axios from "axios"
  * @returns Promise
  */
 
-export const uploadFile = (file, uploadPreset, cloudName) => {
+export const uploadFile = (file, uploadPreset, cloudName="campus-share") => {
   const url = `https://api.cloudinary.com/v1_1/${cloudName}/image/upload`;
   
   return new Promise((resolve, reject) => {
