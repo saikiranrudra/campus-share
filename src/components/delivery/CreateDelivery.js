@@ -78,7 +78,7 @@ const CreateDelivery = ({
       const fromProductSnapLink = ctype === "CREATE" ? await uploadFile(
         fromProductSnap,
         process.env.CLOUDINARY_UPLOAD_PRESET,
-        process.env.CLOUDINARY_CLOUD_NAME
+        process.env.CLOUDINARY_CLOUD_NAME || "campus-share"
       ) : null;
 
       const deliveryObject = {
