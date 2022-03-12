@@ -16,7 +16,7 @@ const order = nc({ onError, onNoMatch })
       });
 
       const options = {
-        amount: 150,
+        amount: 7500,
         currency: "INR",
         receipt: "delivery_recipt",
       };
